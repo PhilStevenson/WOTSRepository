@@ -1,6 +1,18 @@
 
-public class customer {
+public class Customer {
 
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+	public void setFirstName(String firstName) {
+		
+		this.firstName = firstName;
+
+	}
 
 
 	private String firstName;
@@ -19,10 +31,11 @@ public class customer {
 	
 	private String cardNumber;
 	private String cardName;
+	private String cardExpiry; 
 	private String cardSecNum;
 	
 	
-	public customer() {
+	public Customer() {
 		
 	}
 	

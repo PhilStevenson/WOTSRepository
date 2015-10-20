@@ -1,5 +1,5 @@
 
-public class order {
+public class Order {
 	
 	private String ID;
 	private String[] products;
@@ -10,7 +10,7 @@ public class order {
 		Open, Processing, Delivery, Closed
 	}
 	
-	public order() {
+	public Order() {
 		
 	}
 	
