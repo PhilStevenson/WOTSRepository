@@ -7,7 +7,7 @@ public class Order {
 	private String zone;
 	
 	private enum orderStatus {
-		Open, Processing, Delivery, Closed
+		Pending, Processing, Delivery, Closed
 	}
 	
 	public Order() {
