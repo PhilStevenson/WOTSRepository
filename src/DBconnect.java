@@ -148,7 +148,12 @@ public class DBconnect {
 							String cardExpiry,
 							String cardSecNum) {
 		
-		String query = "INSERT INTO customer VALUES ('" 
+		ArrayList<String> ids = getIds("customer");
+		
+		if (!ids.contains(id))
+		{
+		
+			String query = "INSERT INTO customer VALUES ('" 
 													+ id + "', '"
 													+ firstName + "', '" 
 													+ surName + "', '" 
@@ -166,11 +171,10 @@ public class DBconnect {
 													+ cardExpiry + "', '"
 													+ cardSecNum + "');";
 		
-		ArrayList<String> ids = getIds("customer");
-		
-		if (!ids.contains(id))
-		{
 			updateDB(query);
+			
+		} else {
+			System.out.println("This record already exists!");
 		}
 		
 		//System.out.println(result);
@@ -185,6 +189,46 @@ public class DBconnect {
 //			++rowCount;
 //		}
 //		System.out.println("Total number of records = " + rowCount);
+	}
+	
+	public void addCustOrder(
+							String id,
+							String custID,
+							String[][] products,
+							String dateTime,
+							String zone,
+							String status) {
+		
+		ArrayList<String> ids = getIds("custorder");		
+		
+		if (!ids.contains(id))
+		{
+			
+			String query = "INSERT INTO customer VALUES ('" 
+											+ id + "', '"
+											+ custID + "', '" 
+											+ dateTime + "', '" 
+											+ zone + "', '"
+											+ status+ "');";
+			updateDB(query);
+			
+			for(String item : products){
+				query = "INSERT INTO orderline";
+			}
+			
+			/**
+			 * create 2 dimensional array to store products and quantity for an order 
+			 * then insert into orderline DB
+			 *  
+			 */
+		
+		} else {
+			
+			System.out.println("This record already exists!");
+		}
+		
+		
+		
 	}
 
 	

@@ -41,12 +41,6 @@ public class Customer {
 	
 	public Customer() {
 		
-		DBconnect con = new DBconnect();
-		
-		System.out.println(this.toString());
-		
-		con.addCustomer(genID(), "Philip", "Stevenson", "philstevenson@live.co.uk", "07754319562", "Beech House", "Brucefield Road", "Blairgowrie", "Perthshire", "Scotland", "PH106LA", 10000, "1234123412341234", "MR PHILIP A STEVENSON", "0915", "123");
-		
 	}
 	
 	private String genID() {
@@ -82,6 +76,11 @@ public class Customer {
 
 		return newId;
 		
+	}
+	
+	private void newCustomer(){
+		DBconnect con = new DBconnect();
+		con.addCustomer(genID(), "Philip", "Stevenson", "philstevenson@live.co.uk", "07754319562", "Beech House", "Brucefield Road", "Blairgowrie", "Perthshire", "Scotland", "PH106LA", 10000, "1234123412341234", "MR PHILIP A STEVENSON", "0915", "123");
 	}
 	
 }
