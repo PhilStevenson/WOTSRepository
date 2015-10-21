@@ -1,15 +1,14 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-
-public class CustOrder extends Order {
+public class PurcOrder extends Order{
 	
 	private String genID() {
-		String newId = "COR";
+		String newId = "POR";
 		
 		DBconnect con = new DBconnect();
 		
-		ArrayList<String> ids = con.getIds("custorder");
+		ArrayList<String> ids = con.getIds("purchorder");
 		ArrayList<Integer> idNum = new ArrayList();
 		
 		if(!ids.isEmpty()) {
@@ -27,14 +26,15 @@ public class CustOrder extends Order {
 			}
 				
 			newId = newId + zero + nxtNum;
-			System.out.println("CustOrder/genID: New ID Generated: " + newId);
+			System.out.println("PurcOrder/genID: New ID Generated: " + newId);
 			System.out.println();
 		} else {
 			newId = newId + "00001";
-			System.out.println("CustOrder/genID: First ID Generated: " + newId);
+			System.out.println("PurcOrder/genID: First ID Generated: " + newId);
 			System.out.println();
 		}
 
 		return newId;
 	}
+	
 }
