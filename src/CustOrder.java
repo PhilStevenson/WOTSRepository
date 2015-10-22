@@ -60,9 +60,12 @@ public class CustOrder extends Order {
 	
 	public void printOrders() {
 		ArrayList<CustOrder> orders = con.getOrders();
-			System.out.println("	Order		CustID		Zone	Date Time				Status");
+		Customer cus = new Customer();
+		
+			System.out.println(" Order\t\tCustomer Name\t\tZone\tDate Time\tStatus");
 		for(CustOrder o : orders) {
-			System.out.println( "	" + o.id + "	" + o.custID + "	" + o.zone + "	" + o.dateTime + "		" + o.status);
+			cus = cus.getCusDetails(o.custID);
+			System.out.println(" " + o.id + "\t" + cus.firstName+" "+cus.surName + "\t" + o.zone + "\t\t" + o.dateTime + "\t\t" + o.status);
 		}
 		
 	}

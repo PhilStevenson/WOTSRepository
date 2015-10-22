@@ -80,8 +80,7 @@ public class Customer {
 	
 	public Customer getCusDetails(String custID) {
 		
-		
-		
+		return con.getCustomer(custID);
 		
 	}
 	

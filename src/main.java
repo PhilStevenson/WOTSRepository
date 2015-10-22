@@ -20,7 +20,7 @@ public class main {
 //		pro.newProduct("Bill and Ben Gnomes", "Inspired by the ledgend of bilal and Ben from Coding Tiger Compiling Dragon", 79.99);
 //		
 		
-		ord.newCustOrder("CUS00001");
+		//ord.newCustOrder("CUS00002");
 		
 //		ord.newOrderItem("COR00001", "PRO00005", 1);
 //		ord.newOrderItem("COR00001", "PRO00001", 50);

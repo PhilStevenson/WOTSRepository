@@ -33,9 +33,9 @@ public class DBconnect {
 	
 		try {
 			Class.forName( "com.mysql.jdbc.Driver");
-			System.out.println("AccessDB: Connecting to database...");
+			//System.out.println("AccessDB: Connecting to database...");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			System.out.println("AccessDB: Database Connected!");
+			//System.out.println("AccessDB: Database Connected!");
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("AccessDB: Connection Unsuccessful! :(");
@@ -48,7 +48,7 @@ public class DBconnect {
 	private void closeDB() {
 		try {
 			conn.close();
-			System.out.println("CloseDB: Database Disconnected");
+			//System.out.println("CloseDB: Database Disconnected");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,8 +70,8 @@ public class DBconnect {
 		try {
 			Statement stmt = conn.createStatement();
 			
-	        System.out.println("queryDB: The SQL query is: " + query); // Echo For debugging
-	        System.out.println();
+	        //System.out.println("queryDB: The SQL query is: " + query); // Echo For debugging
+	        //System.out.println();
 	 
 	        result = stmt.executeQuery(query);
 			
@@ -138,9 +138,26 @@ public class DBconnect {
 		try {
 			while(res.next()) {
 				cus.firstName = res.getString("firstName");
-				cus.surName = res.getString("sname");
+				cus.surName = res.getString("surName");
+				cus.email = res.getString("email");
+				cus.telephone = res.getString("telephone");
+				cus.addressFirstLine = res.getString("addressFirstLine");
+				cus.addressSecondLine = res.getString("addressSecondLine");
+				cus.addressTownCity = res.getString("addressTownCity");
+				cus.addressCounty = res.getString("addressCounty");
+				cus.addressCountry = res.getString("addressCountry");
+				cus.addressPostcode = res.getString("addressPostcode");
+				cus.availableCredit = Double.valueOf(res.getString("availableCredit"));
+				cus.cardNumber = res.getString("cardNumber");
+				cus.cardName = res.getString("cardName");
+				cus.cardExpiry = res.getString("cardExpiry");
+				cus.cardSecNum = res.getString("cardSecNum");
 			}
+		} catch(SQLException e) {
+			e.printStackTrace();
 		}
+		
+		return cus;
 	}
 	
 	public ArrayList<CustOrder> getOrders() {
