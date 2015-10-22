@@ -4,7 +4,7 @@ import java.util.Collections;
 
 public class Customer {
 
-
+	DBconnect con = new DBconnect();
 
 	public String getFirstName() {
 		return firstName;
@@ -18,24 +18,24 @@ public class Customer {
 	}
 
 
-	private String firstName;
-	private String surName;
-	private String email;
-	private String telephone;
+	protected String firstName;
+	protected String surName;
+	protected String email;
+	protected String telephone;
 	
-	private String addressFirstLine;
-	private String addressSecondLine;
-	private String addressTownCity;
-	private String addressCounty;
-	private String addressCountry;
-	private String addressPostcode;
+	protected String addressFirstLine;
+	protected String addressSecondLine;
+	protected String addressTownCity;
+	protected String addressCounty;
+	protected String addressCountry;
+	protected String addressPostcode;
 	
-	private double availableCredit;
+	protected double availableCredit;
 	
-	private String cardNumber;
-	private String cardName;
-	private String cardExpiry; 
-	private String cardSecNum;
+	protected String cardNumber;
+	protected String cardName;
+	protected String cardExpiry; 
+	protected String cardSecNum;
 	
 
 	
@@ -78,9 +78,22 @@ public class Customer {
 		
 	}
 	
-	private void newCustomer(){
-		DBconnect con = new DBconnect();
-		con.addCustomer(genID(), "Philip", "Stevenson", "philstevenson@live.co.uk", "07754319562", "Beech House", "Brucefield Road", "Blairgowrie", "Perthshire", "Scotland", "PH106LA", 10000, "1234123412341234", "MR PHILIP A STEVENSON", "0915", "123");
+	public Customer getCusDetails(String custID) {
+		
+		
+		
+		
+	}
+	
+	public void newCustomer(String fname, String surname, String email, String tel, String addfline,
+			String addsline, String addtowncity, String addcounty, String addcountry, String addpostcode,
+			double credit, String cardnum, String cardname, String cardexp, String secnum){
+		
+		con.addCustomer(genID(), fname, surname, email, tel, addfline, addsline, addtowncity,
+				addcounty, addcountry, addpostcode, credit, cardnum, cardname, cardexp, secnum);
+		
+		
+		//con.addCustomer(genID(), "Philip", "Stevenson", "philstevenson@live.co.uk", "07754319562", "Beech House", "Brucefield Road", "Blairgowrie", "Perthshire", "Scotland", "PH106LA", 10000, "1234123412341234", "MR PHILIP A STEVENSON", "0915", "123");
 	}
 	
 }

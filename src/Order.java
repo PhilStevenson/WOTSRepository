@@ -4,23 +4,18 @@ import java.util.Collections;
 
 public class Order {
 	
-	private String id;
-	private String custID;
+	protected String id;
+	protected String custID;
 	
-	private String addressFirstLine;
-	private String addressSecondLine;
-	private String addressTownCity;
-	private String addressCounty;
-	private String addressCountry;
-	private String addressPostcode;
+	protected String dateTime;
+	protected String zone;
+	protected String status;
 	
-	private String[] products;
-	private String dateTime;
-	private String zone;
-	
-	private enum orderStatus {
+	protected enum orderStatus {
 		Pending, Processing, Delivery, Arrived, Closed
 	}
+	
+	DBconnect con = new DBconnect();
 	
 	public Order() {
 		

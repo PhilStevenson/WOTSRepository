@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class DBconnect {
@@ -32,12 +33,12 @@ public class DBconnect {
 	
 		try {
 			Class.forName( "com.mysql.jdbc.Driver");
-			System.out.println("Connecting to database...");
+			System.out.println("AccessDB: Connecting to database...");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			System.out.println("Database Connected");
+			System.out.println("AccessDB: Database Connected!");
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Connection Unsuccessful");
+			System.out.println("AccessDB: Connection Unsuccessful! :(");
 			e.printStackTrace();
 			
 		} 
@@ -47,7 +48,7 @@ public class DBconnect {
 	private void closeDB() {
 		try {
 			conn.close();
-			System.out.println("Database Disconnected");
+			System.out.println("CloseDB: Database Disconnected");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,7 +101,6 @@ public class DBconnect {
 		closeDB();
 	}
 	
-	
 	public ArrayList<String> getIds(String table) {
 	
 		
@@ -128,6 +128,49 @@ public class DBconnect {
 		
 		closeDB();
 		return ids;
+	}
+	
+	public Customer getCustomer(String custID) {
+		String query = "SELECT * FROM customer WHERE id = '" + custID + "';";
+		Customer cus = new Customer();
+		ResultSet res = queryDB(query);
+		
+		try {
+			while(res.next()) {
+				cus.firstName = res.getString("firstName");
+				cus.surName = res.getString("sname");
+			}
+		}
+	}
+	
+	public ArrayList<CustOrder> getOrders() {
+		
+		
+		String query = "SELECT * FROM custorder ;";
+		ArrayList<CustOrder> orders = new ArrayList<CustOrder>();
+		ResultSet res = queryDB(query);
+		
+		try {
+			while(res.next()) {   // Move the cursor to the next row
+				CustOrder cord = new CustOrder();
+				
+				
+				cord.id = res.getString("id");
+				cord.custID = res.getString("custID");
+				cord.dateTime = res.getString("dateTime");
+				cord.zone = res.getString("zone");
+				cord.status = res.getString("status");
+				
+				orders.add(cord);
+			
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return orders;
 	}
 	
 	public void addCustomer(
@@ -194,17 +237,18 @@ public class DBconnect {
 	public void addCustOrder(
 							String id,
 							String custID,
-							String[][] products,
 							String dateTime,
 							String zone,
 							String status) {
+		
+		//orderline = new HashMap<String,String>();
 		
 		ArrayList<String> ids = getIds("custorder");		
 		
 		if (!ids.contains(id))
 		{
 			
-			String query = "INSERT INTO customer VALUES ('" 
+			String query = "INSERT INTO custorder VALUES ('" 
 											+ id + "', '"
 											+ custID + "', '" 
 											+ dateTime + "', '" 
@@ -212,9 +256,7 @@ public class DBconnect {
 											+ status+ "');";
 			updateDB(query);
 			
-			for(String item : products){
-				query = "INSERT INTO orderline";
-			}
+			
 			
 			/**
 			 * create 2 dimensional array to store products and quantity for an order 
@@ -231,6 +273,66 @@ public class DBconnect {
 		
 	}
 
+	public void addOrderItem(String orderID, String prodID, String quant) {
+		String query;
+		boolean ex = false;
+		ResultSet result = queryDB("SELECT orderID, productID FROM orderline");
+
+		try {
+			
+			while(result.next()) {   // Move the cursor to the next row
+				String oid = result.getString("orderID");
+				String pid = result.getString("productID");
+				
+				if (oid.equals(orderID) && pid.equals(prodID)) {
+					ex = true;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
 	
+		if(ex) {
+			System.out.println("Record Already Exsists!");
+		} else {
+			query = "INSERT INTO orderline VALUES ('" + orderID + "','" + prodID + "','" + quant + "');";
+			updateDB(query);
+		}
+		
+	}
+	
+	public String getPostcode(String custID) {
+
+		String postcode = null;
+		String query = "SELECT addressPostcode FROM customer WHERE id = '" + custID + "';";
+		
+		ResultSet res = queryDB(query);
+		
+		try {
+			while(res.next()) {   // Move the cursor to the next row
+				postcode = res.getString("addressPostcode");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println(postcode);
+		
+		return postcode;
+		
+	}
+
+	
+	public void addProduct(String prodID, String name, String description, double price) {
+		
+		String query = "INSERT INTO product VALUES ('" + prodID + "', '" + name + "', '" + description + "', " + String.valueOf(price) + ");";
+		
+		updateDB(query);
+		
+	}
 
 }

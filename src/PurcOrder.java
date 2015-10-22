@@ -6,8 +6,6 @@ public class PurcOrder extends Order{
 	private String genID() {
 		String newId = "POR";
 		
-		DBconnect con = new DBconnect();
-		
 		ArrayList<String> ids = con.getIds("purchorder");
 		ArrayList<Integer> idNum = new ArrayList();
 		

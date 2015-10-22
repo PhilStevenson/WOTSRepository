@@ -1,13 +1,12 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 
 public class CustOrder extends Order {
 	
 	private String genID() {
 		String newId = "COR";
-		
-		DBconnect con = new DBconnect();
 		
 		ArrayList<String> ids = con.getIds("custorder");
 		ArrayList<Integer> idNum = new ArrayList();
@@ -36,5 +35,35 @@ public class CustOrder extends Order {
 		}
 
 		return newId;
+	}
+
+	public void newCustOrder(String custID) {
+		
+		Date d = new Date();
+		
+		dateTime = String.valueOf(d);
+		
+		String postcode = con.getPostcode(custID);
+		
+		zone = postcode.substring(0,4);
+		
+		
+		System.out.println("Custorder/newCustorder: Zone: " + zone);
+		System.out.println("Custorder/newCustorder: Order Created " + dateTime);
+		
+		con.addCustOrder(genID(), custID, dateTime, zone, "Incomplete");
+	}
+	
+	public void newOrderItem(String orderID, String prodID, int quant) {
+		con.addOrderItem(orderID, prodID, String.valueOf(quant));
+	}
+	
+	public void printOrders() {
+		ArrayList<CustOrder> orders = con.getOrders();
+			System.out.println("	Order		CustID		Zone	Date Time				Status");
+		for(CustOrder o : orders) {
+			System.out.println( "	" + o.id + "	" + o.custID + "	" + o.zone + "	" + o.dateTime + "		" + o.status);
+		}
+		
 	}
 }

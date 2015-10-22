@@ -7,12 +7,29 @@ public class main {
 		
 		
 		
-		Customer customer001 = new Customer();
-
+		Customer cus = new Customer();
+		
+		CustOrder ord = new CustOrder();
+		Product pro = new Product();
+		
+//		pro.newProduct("Halfpint Ben Gnome","A Gnome designed from the famous character Halfpint Ben." , 0.56);
+//		pro.newProduct("Physics Joe Gnome", "A Gnome of Joe who studied physics", 69);
+//		pro.newProduct("The Rampant Mabbett Gnome", "oh Mabbett", 22.5);
+//		pro.newProduct("Mediterranean Dan Gnome", "Disclaimer: NOT Mediterranean", 45.21);
+//		pro.newProduct("The Colm it Down Gnome", "Colm the gnome is a fictional charachter who works the long lost trade of NETbuilder", 500.5);
+//		pro.newProduct("Bill and Ben Gnomes", "Inspired by the ledgend of bilal and Ben from Coding Tiger Compiling Dragon", 79.99);
+//		
+		
+		ord.newCustOrder("CUS00001");
+		
+//		ord.newOrderItem("COR00001", "PRO00005", 1);
+//		ord.newOrderItem("COR00001", "PRO00001", 50);
+		
+		ord.printOrders();
 		
 		//DBconnect con = new DBconnect();
 		
-		//customer001.setFirstName("Philip");
+		//cus.setFirstName("Philip");
 		
 		//System.out.println("The customers name is " + customer001.getFirstName());
 		
