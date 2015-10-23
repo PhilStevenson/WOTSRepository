@@ -13,11 +13,6 @@ public class GUI extends JFrame {
 
 	public GUI() { prepareGUI(); }
 
-	public static void main(String[] args) {
-		GUI sD = new GUI();
-		sD.showEvent();
-	}
-
 	private void prepareGUI() {
 		mainFrame = new JFrame("Java SWING Examples");
 		mainFrame.setSize(400, 400);
