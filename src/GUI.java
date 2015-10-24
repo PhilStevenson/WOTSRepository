@@ -6,21 +6,24 @@ import java.awt.event.*;
 
 public class GUI extends JFrame {
 	
-	private JFrame mainFrame;
+	private JFrame initFrame;
 	private JLabel headerLabel;
 	private JLabel statusLabel;
 	private JPanel controlPanel;
+	private JPanel orderPanel;
 
 	public GUI() { prepareGUI(); }
 
 	private void prepareGUI() {
-		mainFrame = new JFrame("Java SWING Examples");
-		mainFrame.setSize(400, 400);
-		mainFrame.setLayout(new GridLayout(3, 1));
+		initFrame = new JFrame("Warehouse Order Tracking System");
+		initFrame.setSize(400, 400);
+		initFrame.setLayout(new GridLayout(3, 1));
+		
+		
 		headerLabel = new JLabel("", JLabel.CENTER);
 		statusLabel = new JLabel("", JLabel.CENTER);
 		statusLabel.setSize(350, 100);
-		mainFrame.addWindowListener(new WindowAdapter() {
+		initFrame.addWindowListener(new WindowAdapter() {
 
 			public void windowClosing(WindowEvent windowEvent) {
 				System.exit(0);
@@ -28,29 +31,39 @@ public class GUI extends JFrame {
 		});
 		
 		controlPanel = new JPanel();
+		orderPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
-		mainFrame.add(headerLabel);
-		mainFrame.add(controlPanel);
-		mainFrame.add(statusLabel);
-		mainFrame.setVisible(true);
+		orderPanel.setLayout(new FlowLayout());
+		
+		initFrame.add(headerLabel);
+		initFrame.add(controlPanel);
+		initFrame.add(statusLabel);
+
+		initFrame.setVisible(true);
+		
 	}
 	
-	private void showEvent() {
+	protected void showEvent() {
 		headerLabel.setText("Press Button");
-		JButton okButton = new JButton("OK");
-		JButton submitButton = new JButton("Submit");
-		JButton cancelButton = new JButton("Cancel");
-		okButton.setActionCommand("OK");
-		submitButton.setActionCommand("Submit");
-		cancelButton.setActionCommand("Cancel");
 		
-		okButton.addActionListener(new BCL());
-		submitButton.addActionListener(new BCL());
-		cancelButton.addActionListener(new BCL());
-		controlPanel.add(okButton);
-		controlPanel.add(submitButton);
-		controlPanel.add(cancelButton);
-		mainFrame.setVisible(true);
+		JButton fufillButton = new JButton("Fufill Order");
+		JButton restockButton = new JButton("Restock");
+		JButton exitButton = new JButton("Exit");
+		
+		fufillButton.setActionCommand("VcusOrder");
+		restockButton.setActionCommand("Rstock");
+		exitButton.setActionCommand("exit");
+		
+		fufillButton.addActionListener(new BCL());
+		restockButton.addActionListener(new BCL());
+		exitButton.addActionListener(new BCL());
+		
+		controlPanel.add(fufillButton);
+		controlPanel.add(restockButton);
+		controlPanel.add(exitButton);
+		
+		initFrame.setVisible(true);
+		
 	}
 	
 	private class BCL implements ActionListener {
@@ -58,11 +71,27 @@ public class GUI extends JFrame {
 		public void actionPerformed(ActionEvent ae) {
 		String command = ae.getActionCommand();
 			switch (command) {
-				case "OK": statusLabel.setText("OK!");
+				case "VcusOrder":
+					
+					headerLabel.setVisible(false);
+					initFrame.remove(headerLabel);
+					controlPanel.setVisible(false);
+					initFrame.remove(controlPanel);
+					statusLabel.setVisible(false);
+					initFrame.remove(statusLabel);
+					
+					initFrame.add(orderPanel);
+					orderPanel.setVisible(true);
+					
+					initFrame.setSize(1280, 765);
+					
+					
 				break;
-				case "Submit": statusLabel.setText("Submitted!");
+				case "Rstock":
+					statusLabel.setText("Submitted!");
 				break;
-				case "Cancel": statusLabel.setText("Cancel not possible");
+				case "exit": 
+					System.exit(0);
 				break;
 			}
 		}
