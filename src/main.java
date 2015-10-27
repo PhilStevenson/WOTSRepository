@@ -12,9 +12,10 @@ public class main {
 		CustOrder ord = new CustOrder();
 		Product pro = new Product();
 		
-		GUI sD = new GUI();
-		sD.showEvent();
+		GUI gui = new GUI();
 
+		
+		
 		
 //		pro.newProduct("Halfpint Ben Gnome","A Gnome designed from the famous character Halfpint Ben." , 0.56);
 //		pro.newProduct("Physics Joe Gnome", "A Gnome of Joe who studied physics", 69);

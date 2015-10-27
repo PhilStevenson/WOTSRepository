@@ -1,19 +1,122 @@
 import javax.swing.*;
 
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.*;
 
 public class GUI extends JFrame {
 	
-	private JFrame initFrame;
-	private JLabel headerLabel;
-	private JLabel statusLabel;
-	private JPanel controlPanel;
-	private JPanel orderPanel;
+	private JPanel mainPanel = new JPanel();
+	private JPanel orderPanel = new JPanel();
+	
+	JButton exitButton = new JButton("Exit");
 
-	public GUI() { prepareGUI(); }
+	
+	Container mainMenu = new Container();
+	Container orderMenu = new Container();
+	
+	JFrame frame = new JFrame("Warehouse Order Tracking System");
 
+	public GUI() {
+		//prepareGUI(); 
+		init();
+	}
+
+	
+	public void init()
+	{
+	
+	Toolkit tk = Toolkit.getDefaultToolkit();
+	int xSize = ((int) tk.getScreenSize().getWidth());
+	int ySize = ((int) tk.getScreenSize().getHeight());
+	frame.setSize(xSize,ySize);
+	
+
+	
+	mainMenu();
+	frame.setVisible(true);
+	}
+	
+	private void mainMenu() {
+		mainMenu.setVisible(true);
+		
+		
+		frame.add(mainMenu);
+		mainMenu.add(mainPanel);
+		
+		mainMenu.setLayout(new FlowLayout());
+		orderPanel.setLayout(new FlowLayout());
+		
+		
+		mainPanel.setVisible(true);
+		
+		
+		
+		
+		JButton orderButton = new JButton("Process Order");
+		JButton stockButton = new JButton("Process Stock");
+		
+		
+		orderButton.setActionCommand("processOrder");
+		stockButton.setActionCommand("processStock");
+		exitButton.setActionCommand("exit");
+		
+		
+		orderButton.addActionListener(new BCL());
+		stockButton.addActionListener(new BCL());
+		exitButton.addActionListener(new BCL());
+		
+		mainPanel.add(orderButton);
+		mainPanel.add(stockButton);
+		mainPanel.add(exitButton);
+		
+		
+	}
+	
+	private void processOrder() {
+		mainMenu.setVisible(false);
+		orderMenu.setVisible(true);
+		orderMenu.add(orderPanel);
+		
+		
+		exitButton.setActionCommand("exit");
+		exitButton.addActionListener(new BCL());
+		
+		orderPanel.add(exitButton);
+	}
+	
+	private void processStock() {
+		
+	}
+	
+	private class BCL implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+		String command = ae.getActionCommand();
+			switch (command) {
+				case "processOrder":
+					processOrder();
+					
+				break;
+				case "processStock":
+					
+				break;
+				case "exit": 
+					System.exit(0);
+				break;
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+/*	
+	
 	private void prepareGUI() {
 		initFrame = new JFrame("Warehouse Order Tracking System");
 		initFrame.setSize(400, 400);
@@ -30,13 +133,13 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		controlPanel = new JPanel();
+		mainMenu = new JPanel();
 		orderPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
+		mainMenu.setLayout(new FlowLayout());
 		orderPanel.setLayout(new FlowLayout());
 		
 		initFrame.add(headerLabel);
-		initFrame.add(controlPanel);
+		initFrame.add(mainMenu);
 		initFrame.add(statusLabel);
 
 		initFrame.setVisible(true);
@@ -58,9 +161,9 @@ public class GUI extends JFrame {
 		restockButton.addActionListener(new BCL());
 		exitButton.addActionListener(new BCL());
 		
-		controlPanel.add(fufillButton);
-		controlPanel.add(restockButton);
-		controlPanel.add(exitButton);
+		mainMenu.add(fufillButton);
+		mainMenu.add(restockButton);
+		mainMenu.add(exitButton);
 		
 		initFrame.setVisible(true);
 		
@@ -75,8 +178,8 @@ public class GUI extends JFrame {
 					
 					headerLabel.setVisible(false);
 					initFrame.remove(headerLabel);
-					controlPanel.setVisible(false);
-					initFrame.remove(controlPanel);
+					mainMenu.setVisible(false);
+					initFrame.remove(mainMenu);
 					statusLabel.setVisible(false);
 					initFrame.remove(statusLabel);
 					
@@ -96,4 +199,5 @@ public class GUI extends JFrame {
 			}
 		}
 	}
+*/
 }
