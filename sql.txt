@@ -1,0 +1,148 @@
+-- phpMyAdmin SQL Dump
+-- version 4.2.10
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost:8889
+-- Generation Time: Oct 27, 2015 at 01:59 PM
+-- Server version: 5.5.38
+-- PHP Version: 5.6.2
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Database: `wots`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+CREATE TABLE `customer` (
+  `id` varchar(8) NOT NULL,
+  `firstName` varchar(30) NOT NULL,
+  `surName` varchar(30) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `telephone` varchar(30) NOT NULL,
+  `addressFirstLine` varchar(50) NOT NULL,
+  `addressSecondLine` varchar(50) NOT NULL,
+  `addressTownCity` varchar(50) NOT NULL,
+  `addressCounty` varchar(50) NOT NULL,
+  `addressCountry` varchar(50) NOT NULL,
+  `addressPostcode` varchar(45) NOT NULL,
+  `availableCredit` double(8,2) NOT NULL,
+  `cardNumber` varchar(16) NOT NULL,
+  `cardName` varchar(50) NOT NULL,
+  `cardExpiry` varchar(4) NOT NULL,
+  `cardSecNum` varchar(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`id`, `firstName`, `surName`, `email`, `telephone`, `addressFirstLine`, `addressSecondLine`, `addressTownCity`, `addressCounty`, `addressCountry`, `addressPostcode`, `availableCredit`, `cardNumber`, `cardName`, `cardExpiry`, `cardSecNum`) VALUES
+('CUS00001', 'Philip', 'Stevenson', 'philstevenson@live.co.uk', '07754319562', 'Beech House', 'Brucefield Road', 'Blairgowrie', 'Perthshire', 'Scotland', 'PH106LA', 10000.00, '1234123412341234', 'MR PHILIP A STEVENSON', '0915', '123'),
+('CUS00002', 'Eddard', 'Stark', 'stark@winterfell.com', '999', 'The Keep', 'Winterfell', 'Winterfell', 'The North', 'Westeros', 'N98 W23', 5999.00, '086512376537', 'LORD EDDARD STARK', '2145', '123');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `custorder`
+--
+
+CREATE TABLE `custorder` (
+  `id` varchar(8) NOT NULL,
+  `custID` varchar(8) NOT NULL,
+  `dateTime` varchar(45) NOT NULL,
+  `zone` varchar(45) DEFAULT NULL,
+  `status` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `custorder`
+--
+
+INSERT INTO `custorder` (`id`, `custID`, `dateTime`, `zone`, `status`) VALUES
+('COR00001', 'CUS00001', 'Thu Oct 22 13:09:46 BST 2015', 'PH10', 'Incomplete'),
+('COR00002', 'CUS00001', 'Thu Oct 22 15:40:20 BST 2015', 'PH10', 'Incomplete'),
+('COR00003', 'CUS00001', 'Thu Oct 22 16:54:36 BST 2015', 'PH10', 'Incomplete'),
+('COR00004', 'CUS00001', 'Thu Oct 22 16:54:59 BST 2015', 'PH10', 'Incomplete'),
+('COR00005', 'CUS00001', 'Thu Oct 22 16:56:36 BST 2015', 'PH10', 'Incomplete'),
+('COR00006', 'CUS00001', 'Thu Oct 22 16:58:48 BST 2015', 'PH10', 'Incomplete'),
+('COR00007', 'CUS00002', 'Thu Oct 22 17:15:22 BST 2015', 'N98 ', 'Incomplete');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderline`
+--
+
+CREATE TABLE `orderline` (
+  `orderID` varchar(8) NOT NULL,
+  `productID` varchar(8) NOT NULL,
+  `quantity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orderline`
+--
+
+INSERT INTO `orderline` (`orderID`, `productID`, `quantity`) VALUES
+('COR00001', 'PRO00001', 50),
+('COR00001', 'PRO00005', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product`
+--
+
+CREATE TABLE `product` (
+  `id` varchar(8) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `description` text NOT NULL,
+  `price` double(5,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`id`, `name`, `description`, `price`) VALUES
+('PRO00001', 'Halfpint Ben Gnome', 'A Gnome designed from the famous character Halfpint Ben.', 0.56),
+('PRO00002', 'Physics Joe Gnome', 'A Gnome of Joe who studied physics', 69.00),
+('PRO00003', 'The Rampant Mabbett Gnome', 'oh Mabbett', 22.50),
+('PRO00004', 'Mediterranean Dan Gnome', 'Disclaimer: NOT Mediterranean', 45.21),
+('PRO00005', 'The Colm it Down Gnome', 'Colm the gnome is a fictional charachter who works the long lost trade of NETbuilder', 500.50),
+('PRO00006', 'Bill and Ben Gnomes', 'Inspired by the ledgend of bilal and Ben from Coding Tiger Compiling Dragon', 79.99);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `customer`
+--
+ALTER TABLE `customer`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `custorder`
+--
+ALTER TABLE `custorder`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orderline`
+--
+ALTER TABLE `orderline`
+ ADD PRIMARY KEY (`orderID`,`productID`);
+
+--
+-- Indexes for table `product`
+--
+ALTER TABLE `product`
+ ADD PRIMARY KEY (`id`);
