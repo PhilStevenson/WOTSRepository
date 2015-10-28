@@ -11,7 +11,7 @@ public class GUI extends JFrame {
 	private JPanel mainPanel = new JPanel();
 	private JPanel orderPanel = new JPanel();
 	
-	JButton exitButton = new JButton("Exit");
+	
 
 	
 	Container mainMenu = new Container();
@@ -57,7 +57,7 @@ public class GUI extends JFrame {
 		
 		JButton orderButton = new JButton("Process Order");
 		JButton stockButton = new JButton("Process Stock");
-		
+		JButton exitButton = new JButton("Exit");
 		
 		orderButton.setActionCommand("processOrder");
 		stockButton.setActionCommand("processStock");
@@ -76,8 +76,11 @@ public class GUI extends JFrame {
 	}
 	
 	private void processOrder() {
+		JButton exitButton = new JButton("Exit");
+		
 		mainMenu.setVisible(false);
-		orderMenu.setVisible(true);
+		mainMenu.add(orderMenu);
+		
 		orderMenu.add(orderPanel);
 		
 		
@@ -85,6 +88,8 @@ public class GUI extends JFrame {
 		exitButton.addActionListener(new BCL());
 		
 		orderPanel.add(exitButton);
+		
+		orderMenu.setVisible(true);
 	}
 	
 	private void processStock() {
