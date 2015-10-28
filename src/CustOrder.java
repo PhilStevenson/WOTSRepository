@@ -69,4 +69,21 @@ public class CustOrder extends Order {
 		}
 		
 	}
+	
+	public String[][] getOrders() {
+		ArrayList<CustOrder> orders = con.getOrders();
+								
+		String [][]orderLists = new String[orders.size()][4];
+		
+			int i = 0;
+		for(CustOrder o : orders) {
+			orderLists[i][0] = o.id;
+			orderLists[i][1] = o.zone;
+			orderLists[i][2] = o.dateTime;
+			orderLists[i][3] = o.status;
+			i++;
+		}
+		return orderLists;
+		
+	}
 }

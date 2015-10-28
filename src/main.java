@@ -30,7 +30,7 @@ public class main {
 //		ord.newOrderItem("COR00001", "PRO00005", 1);
 //		ord.newOrderItem("COR00001", "PRO00001", 50);
 		
-		ord.printOrders();
+		//ord.printOrders();
 		
 		//DBconnect con = new DBconnect();
 		

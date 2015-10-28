@@ -10,9 +10,8 @@ public class GUI extends JFrame {
 	
 	private JPanel mainPanel = new JPanel();
 	private JPanel orderPanel = new JPanel();
+	private JTable ordersList;
 	
-	
-
 	
 	Container mainMenu = new Container();
 	Container orderMenu = new Container();
@@ -40,19 +39,13 @@ public class GUI extends JFrame {
 	}
 	
 	private void mainMenu() {
-		mainMenu.setVisible(true);
+		
 		
 		
 		frame.add(mainMenu);
 		mainMenu.add(mainPanel);
 		
 		mainMenu.setLayout(new FlowLayout());
-		orderPanel.setLayout(new FlowLayout());
-		
-		
-		mainPanel.setVisible(true);
-		
-		
 		
 		
 		JButton orderButton = new JButton("Process Order");
@@ -73,23 +66,44 @@ public class GUI extends JFrame {
 		mainPanel.add(exitButton);
 		
 		
+		mainMenu.setVisible(true);
+		mainPanel.setVisible(true);
 	}
 	
 	private void processOrder() {
-		JButton exitButton = new JButton("Exit");
-		
 		mainMenu.setVisible(false);
-		mainMenu.add(orderMenu);
-		
+		JButton exitButton = new JButton("Exit");
+		CustOrder co = new CustOrder();
+				
+		frame.add(orderMenu);
 		orderMenu.add(orderPanel);
 		
+		orderMenu.setLayout(new FlowLayout());
 		
 		exitButton.setActionCommand("exit");
 		exitButton.addActionListener(new BCL());
 		
 		orderPanel.add(exitButton);
 		
+		String[] columnNames = {"Order ID",	"GDZone", "Order Placed", "Status"};
+		
+		//JList ordersList = new JList(co.printOrders());
+		ordersList = new JTable(co.getOrders(), columnNames);
+		JTable orderDetails = new JTable();
+		
+		ordersList.
+		ordersList.addMouseListener(new MCL());
+		
+		
+		
+		orderPanel.add(ordersList);
+		
+		ordersList.setVisible(true);
+		orderPanel.setVisible(true);
 		orderMenu.setVisible(true);
+		frame.setVisible(true);
+	
+
 	}
 	
 	private void processStock() {
@@ -115,94 +129,45 @@ public class GUI extends JFrame {
 		}
 	}
 	
-	
-	
-	
-	
-	
-/*	
-	
-	private void prepareGUI() {
-		initFrame = new JFrame("Warehouse Order Tracking System");
-		initFrame.setSize(400, 400);
-		initFrame.setLayout(new GridLayout(3, 1));
-		
-		
-		headerLabel = new JLabel("", JLabel.CENTER);
-		statusLabel = new JLabel("", JLabel.CENTER);
-		statusLabel.setSize(350, 100);
-		initFrame.addWindowListener(new WindowAdapter() {
+	private class MCL implements MouseListener {
 
-			public void windowClosing(WindowEvent windowEvent) {
-				System.exit(0);
-			}
-		});
-		
-		mainMenu = new JPanel();
-		orderPanel = new JPanel();
-		mainMenu.setLayout(new FlowLayout());
-		orderPanel.setLayout(new FlowLayout());
-		
-		initFrame.add(headerLabel);
-		initFrame.add(mainMenu);
-		initFrame.add(statusLabel);
-
-		initFrame.setVisible(true);
-		
-	}
-	
-	protected void showEvent() {
-		headerLabel.setText("Press Button");
-		
-		JButton fufillButton = new JButton("Fufill Order");
-		JButton restockButton = new JButton("Restock");
-		JButton exitButton = new JButton("Exit");
-		
-		fufillButton.setActionCommand("VcusOrder");
-		restockButton.setActionCommand("Rstock");
-		exitButton.setActionCommand("exit");
-		
-		fufillButton.addActionListener(new BCL());
-		restockButton.addActionListener(new BCL());
-		exitButton.addActionListener(new BCL());
-		
-		mainMenu.add(fufillButton);
-		mainMenu.add(restockButton);
-		mainMenu.add(exitButton);
-		
-		initFrame.setVisible(true);
-		
-	}
-	
-	private class BCL implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent ae) {
-		String command = ae.getActionCommand();
-			switch (command) {
-				case "VcusOrder":
-					
-					headerLabel.setVisible(false);
-					initFrame.remove(headerLabel);
-					mainMenu.setVisible(false);
-					initFrame.remove(mainMenu);
-					statusLabel.setVisible(false);
-					initFrame.remove(statusLabel);
-					
-					initFrame.add(orderPanel);
-					orderPanel.setVisible(true);
-					
-					initFrame.setSize(1280, 765);
-					
-					
-				break;
-				case "Rstock":
-					statusLabel.setText("Submitted!");
-				break;
-				case "exit": 
-					System.exit(0);
-				break;
-			}
+		public void mouseClicked(MouseEvent e) {
+			int row = ordersList.getSelectedRow();
+			CustOrder co = new CustOrder();
+			String[][] orders = co.getOrders();
+			
+			String orderID = orders[row][0];
+			
+			
+			System.out.println("ROW: " + row);
+			System.out.println("ORDER ID: " + orderID);
+			
 		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
-*/
 }
