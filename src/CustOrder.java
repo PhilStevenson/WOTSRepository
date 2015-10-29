@@ -73,7 +73,7 @@ public class CustOrder extends Order {
 	public String[][] getOrders() {
 		ArrayList<CustOrder> orders = con.getOrders();
 								
-		String [][]orderLists = new String[orders.size()][4];
+		String[][] orderLists = new String[orders.size()][4];
 		
 			int i = 0;
 		for(CustOrder o : orders) {
@@ -86,4 +86,42 @@ public class CustOrder extends Order {
 		return orderLists;
 		
 	}
+	
+	public String[] getOrderDetails(String id) {
+		
+		String[] orderDetails = new String[5];
+		Customer cus = new Customer();
+		CustOrder co = con.getOrder(id);
+		
+		cus = cus.getCusDetails(co.custID);
+		
+		orderDetails[0] = co.id;
+		orderDetails[1] = cus.firstName;
+		orderDetails[2] = cus.surName;
+		orderDetails[3] = co.dateTime;
+		orderDetails[4] = co.zone;
+		orderDetails[5] = co.status;
+		
+		//Could Add delivery/customer address
+		
+		
+		return orderDetails;
+	}
+	
+	public String[][] getOrderItems(String id) {
+		
+		ArrayList<OrderLine> orderLines = con.getOrderLines(id);
+		
+		String[][] lines = new String[orderLines.size()][3];
+		
+			int i = 0;
+		for(OrderLine ol : orderLines) {
+			lines[i][0] = ol.orderID;
+			lines[i][1] = ol.productID;
+			lines[i][2] = ol.quantity;
+			i++;
+		}
+		return lines;
+	}
+	
 }

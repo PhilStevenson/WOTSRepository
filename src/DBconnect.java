@@ -185,6 +185,50 @@ public class DBconnect {
 		return orders;
 	}
 	
+	public CustOrder getOrder(String id) {
+		String query = "SELECT * FROM custorder WHERE id = '" + id + "';";
+		ResultSet res = queryDB(query);
+		CustOrder cord = new CustOrder();
+		
+		try {
+			while(res.next()) {   // Move the cursor to the next row
+				
+				cord.id = res.getString("id");
+				cord.custID = res.getString("custID");
+				cord.dateTime = res.getString("dateTime");
+				cord.zone = res.getString("zone");
+				cord.status = res.getString("status");
+			
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return cord;
+	}
+	
+	public ArrayList<OrderLine> getOrderLines(String orderID) {
+		String query = "SELECT * FROM orderline WHERE orderID = '" + orderID + "';";
+		ResultSet res = queryDB(query);
+		ArrayList<OrderLine> ols = new ArrayList<OrderLine>();
+		
+		try {
+			while(res.next()) {   // Move the cursor to the next row
+				OrderLine ol = new OrderLine();
+				ol.orderID = res.getString("orderID");
+				ol.productID = res.getString("productID");
+				ol.quantity = res.getString("quantity");
+				ols.add(ol);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ols;
+	}
+	
 	public void addCustomer(
 							String id,
 							String firstName,

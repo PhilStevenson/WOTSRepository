@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.TableColumn;
 
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -11,6 +12,7 @@ public class GUI extends JFrame {
 	private JPanel mainPanel = new JPanel();
 	private JPanel orderPanel = new JPanel();
 	private JTable ordersList;
+	private JTable itemsList;
 	
 	
 	Container mainMenu = new Container();
@@ -78,24 +80,32 @@ public class GUI extends JFrame {
 		frame.add(orderMenu);
 		orderMenu.add(orderPanel);
 		
-		orderMenu.setLayout(new FlowLayout());
+		orderMenu.setLayout(new GridLayout(3,3));
 		
 		exitButton.setActionCommand("exit");
 		exitButton.addActionListener(new BCL());
 		
-		orderPanel.add(exitButton);
+		
 		
 		String[] columnNames = {"Order ID",	"GDZone", "Order Placed", "Status"};
 		
 		//JList ordersList = new JList(co.printOrders());
 		ordersList = new JTable(co.getOrders(), columnNames);
-		JTable orderDetails = new JTable();
 		
-		ordersList.
+	    TableColumn column = null;
+	    for (int i = 0; i < 3; i++) {
+	        column = ordersList.getColumnModel().getColumn(i);
+	        if (i == 2) {
+	            column.setPreferredWidth(180); //sport column is bigger
+	        } else {
+	            column.setPreferredWidth(80);
+	        }
+	    }
+	    
+	    
 		ordersList.addMouseListener(new MCL());
 		
-		
-		
+		orderPanel.add(exitButton);
 		orderPanel.add(ordersList);
 		
 		ordersList.setVisible(true);
@@ -133,6 +143,11 @@ public class GUI extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+
+			
+
+			//orderPanel.remove(itemsList);
+			
 			int row = ordersList.getSelectedRow();
 			CustOrder co = new CustOrder();
 			String[][] orders = co.getOrders();
@@ -143,6 +158,16 @@ public class GUI extends JFrame {
 			System.out.println("ROW: " + row);
 			System.out.println("ORDER ID: " + orderID);
 			
+			String[] columnNames = {"OrderID",	"Product", "Quantity"};
+			
+		    itemsList = new JTable(co.getOrderItems(orderID),columnNames);
+		    
+		    
+		    orderPanel.add(itemsList);
+			itemsList.setVisible(true);
+			orderPanel.setVisible(true);
+			orderMenu.setVisible(true);
+			frame.setVisible(true);
 		}
 
 		@Override
