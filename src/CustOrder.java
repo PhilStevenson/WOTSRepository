@@ -112,13 +112,20 @@ public class CustOrder extends Order {
 		
 		ArrayList<OrderLine> orderLines = con.getOrderLines(id);
 		
-		String[][] lines = new String[orderLines.size()][3];
+		String[][] lines = new String[orderLines.size()][5];
 		
-			int i = 0;
+		
+		
+		int i = 0;
 		for(OrderLine ol : orderLines) {
-			lines[i][0] = ol.orderID;
-			lines[i][1] = ol.productID;
-			lines[i][2] = ol.quantity;
+			
+			Product prod = con.getProduct(ol.productID);
+			
+			lines[i][0] = ol.productID;
+			lines[i][1] = prod.name;
+			lines[i][2]	= prod.description;
+			lines[i][3] = ol.quantity;
+			lines[i][4] = String.valueOf(prod.price);
 			i++;
 		}
 		return lines;

@@ -229,6 +229,26 @@ public class DBconnect {
 		return ols;
 	}
 	
+	public Product getProduct(String productID) {
+		String query = "SELECT * FROM product WHERE id = '" + productID + "';";
+		ResultSet res = queryDB(query);
+		Product prod = new Product();
+		
+		try {
+			while(res.next()) {   // Move the cursor to the next row
+				prod.ID = res.getString("id");
+				prod.name = res.getString("name");
+				prod.description = res.getString("description");
+				prod.price = res.getDouble("price");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return prod;
+	}
+	
 	public void addCustomer(
 							String id,
 							String firstName,

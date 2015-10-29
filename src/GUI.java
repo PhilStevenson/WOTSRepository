@@ -13,7 +13,7 @@ public class GUI extends JFrame {
 	private JPanel orderPanel = new JPanel();
 	private JTable ordersList;
 	private JTable itemsList;
-	
+	JScrollPane itemsPane;
 	
 	Container mainMenu = new Container();
 	Container orderMenu = new Container();
@@ -80,7 +80,7 @@ public class GUI extends JFrame {
 		frame.add(orderMenu);
 		orderMenu.add(orderPanel);
 		
-		orderMenu.setLayout(new GridLayout(3,3));
+		orderMenu.setLayout(new GridLayout(2,2));
 		
 		exitButton.setActionCommand("exit");
 		exitButton.addActionListener(new BCL());
@@ -106,7 +106,9 @@ public class GUI extends JFrame {
 		ordersList.addMouseListener(new MCL());
 		
 		orderPanel.add(exitButton);
-		orderPanel.add(ordersList);
+		JScrollPane ordersPane = new JScrollPane(ordersList);
+		//orderPanel.add(ordersList);
+		orderPanel.add(ordersPane);
 		
 		ordersList.setVisible(true);
 		orderPanel.setVisible(true);
@@ -144,10 +146,10 @@ public class GUI extends JFrame {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 
-			
-
-			//orderPanel.remove(itemsList);
-			
+			if(itemsPane != null){
+				itemsPane.setVisible(false);
+				orderPanel.remove(itemsList);
+			}
 			int row = ordersList.getSelectedRow();
 			CustOrder co = new CustOrder();
 			String[][] orders = co.getOrders();
@@ -158,12 +160,15 @@ public class GUI extends JFrame {
 			System.out.println("ROW: " + row);
 			System.out.println("ORDER ID: " + orderID);
 			
-			String[] columnNames = {"OrderID",	"Product", "Quantity"};
+			String[] columnNames = {"Product ID","Product", "Description", "Quantity", "Price"};
 			
-		    itemsList = new JTable(co.getOrderItems(orderID),columnNames);
+		    itemsList = new JTable(co.getOrderItems(orderID), columnNames);
 		    
+		    itemsPane = new JScrollPane(itemsList);
+			//orderPanel.add(ordersList);
+			orderPanel.add(itemsPane);
 		    
-		    orderPanel.add(itemsList);
+		    itemsList.setVisible(true);
 			itemsList.setVisible(true);
 			orderPanel.setVisible(true);
 			orderMenu.setVisible(true);

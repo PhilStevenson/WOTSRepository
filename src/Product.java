@@ -3,10 +3,10 @@ import java.util.Collections;
 
 public class Product {
 	
-	private String ID;
-	private String name;
-	private String description;
-	private double price;
+	protected String ID;
+	protected String name;
+	protected String description;
+	protected double price;
 	
 	DBconnect con = new DBconnect();
 	
@@ -50,5 +50,11 @@ public class Product {
 		
 		con.addProduct(genID(), name, description, price); 
 		
+	}
+
+	public void getProductDetails(String id) {
+		Product prod = new Product();
+		
+		prod = con.getProduct(id);
 	}
 }
