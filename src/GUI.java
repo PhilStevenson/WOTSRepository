@@ -13,12 +13,13 @@ public class GUI extends JFrame {
 	private JPanel orderPanel = new JPanel();
 	private JTable ordersList;
 	private JTable itemsList;
+	private int itemsListIndex;
 	private JScrollPane itemsPane;
 	private JTextArea orderDetails;
 	private JComboBox statusList;
 	private JLabel statusLabel;
 	
-	private String orderID;
+	private String currentOrderID;
 	
 	Container mainMenu = new Container();
 	Container orderMenu = new Container();
@@ -37,7 +38,7 @@ public class GUI extends JFrame {
 	int xSize = ((int) tk.getScreenSize().getWidth());
 	int ySize = ((int) tk.getScreenSize().getHeight());
 	frame.setSize(xSize,ySize);
-	
+	orderMenu.setSize(xSize, ySize);
 	mainMenu();
 	frame.setVisible(true);
 	}
@@ -73,6 +74,9 @@ public class GUI extends JFrame {
 	}
 	
 	private void processOrder() {
+		
+		orderPanel.removeAll();
+		
 		mainMenu.setVisible(false);
 		JButton backButton = new JButton("Back");
 		CustOrder co = new CustOrder();
@@ -117,7 +121,57 @@ public class GUI extends JFrame {
 	
 
 	}
-	
+
+	private void processOrder(String orderID) {
+		
+		orderPanel.removeAll();
+		
+		mainMenu.setVisible(false);
+		JButton backButton = new JButton("Back");
+		CustOrder co = new CustOrder();
+				
+		frame.add(orderMenu);
+		orderMenu.add(orderPanel);
+		
+		orderMenu.setLayout(new FlowLayout());
+		
+		backButton.setActionCommand("back");
+		backButton.addActionListener(new BCL());
+		
+		
+		
+		String[] columnNames = {"Order ID",	"GDZone", "Order Placed", "Status"};
+		
+		//JList ordersList = new JList(co.printOrders());
+		ordersList = new JTable(co.getOrders(), columnNames);
+		
+	    TableColumn column = null;
+	    for (int i = 0; i < 3; i++) {
+	        column = ordersList.getColumnModel().getColumn(i);
+	        if (i == 2) {
+	            column.setPreferredWidth(180); //sport column is bigger
+	        } else {
+	            column.setPreferredWidth(80);
+	        }
+	    }
+	    
+	    ordersList.setRowSelectionInterval(itemsListIndex, itemsListIndex);
+		ordersList.addMouseListener(new MCL());
+		
+		orderPanel.add(backButton);
+		JScrollPane ordersPane = new JScrollPane(ordersList);
+
+		orderPanel.add(ordersPane);
+		
+		ordersList.setVisible(true);
+		orderPanel.setVisible(true);
+		orderMenu.setVisible(true);
+
+		frame.setVisible(true);
+		
+		displayOrder();
+
+	}
 	private void processStock() {
 		
 	}
@@ -155,100 +209,111 @@ public class GUI extends JFrame {
 			
 			switch(String.valueOf(statusList.getSelectedItem())) {
 				case "Incomplete":
-					co.updateStatus(orderID,"Incomplete");
+					co.updateStatus(currentOrderID,"Incomplete");
 					break;
 				case "Pending":
-					co.updateStatus(orderID,"Pending");
+					co.updateStatus(currentOrderID,"Pending");
 					break;
 				case "Packed":
-					co.updateStatus(orderID,"Pending");
+					co.updateStatus(currentOrderID,"Pending");
 					break;
 				case "Delivery":
-					co.updateStatus(orderID, "Delivery");
+					co.updateStatus(currentOrderID, "Delivery");
 					break;
 				case "Complete":
-					co.updateStatus(orderID, "Complete");
+					co.updateStatus(currentOrderID, "Complete");
 					break;
 					
 					//TODO update textarea
 			}
 			
-			System.out.println(statusList.getSelectedItem());
+			//Reinitialize
+			processOrder(currentOrderID);
+			
+			//System.out.println(statusList.getSelectedItem());
 			
 		}
+		
+	}
+	
+	private void displayOrder() {
+		if(itemsPane != null){
+			itemsPane.setVisible(false);
+			orderDetails.setVisible(false);
+			statusLabel.setVisible(false);
+			statusList.setVisible(false);
+			
+			orderPanel.remove(statusLabel);
+			orderPanel.remove(statusList);
+			orderPanel.remove(itemsList);
+			orderPanel.remove(orderDetails);
+		}
+		
+		itemsListIndex = ordersList.getSelectedRow();
+		CustOrder co = new CustOrder();
+		String[][] orders = co.getOrders();
+		
+		currentOrderID = orders[itemsListIndex][0];
+		
+		
+		System.out.println("ROW: " + itemsListIndex);
+		System.out.println("ORDER ID: " + currentOrderID);
+		
+		String[] columnNames = {"Product ID","Product", "Description", "Quantity", "Price", "Warehouse Location"};
+		
+	    itemsList = new JTable(co.getOrderItems(currentOrderID), columnNames);
+	    
+	    itemsPane = new JScrollPane(itemsList);
+	    
+	    orderDetails = new JTextArea();
+	    
+	    String[] orderdeets = co.getOrderDetails(currentOrderID);
+	    
+	    orderDetails.setText(
+	    					"Order ID: \t" + orderdeets[0] + "\n\n" + 
+	    					"Customer: \t" + orderdeets[1] + " " + orderdeets[2] + "\n\n" + 
+	    					"Order Placed: \t" + orderdeets[3] + "\n\n" + 
+	    					"GDZ: \t" + orderdeets[4] + "\n\n" + 
+	    					"Current Status: \t" + orderdeets[5]);
+	    
+	    orderPanel.add(orderDetails);
+	    
+	    statusLabel = new JLabel();
+	    
+	    statusLabel.setText("Status: ");
+	    
+	    orderPanel.add(statusLabel);
+	    
+	    
+	    String[] statuses = {"Incomplete","Pending", "Packed", "Delivery", "Complete"};
+	    
+	    statusList = new JComboBox(statuses);
+	    
+	    statusList.setSelectedItem(orderdeets[5]);
+	    
+	    statusList.addActionListener(new CBL());
+	    
+	    orderPanel.add(statusList);
+	    
+	    
+		orderPanel.add(itemsPane);
+	    
+		statusLabel.setVisible(true);
+		statusList.setVisible(true);
+		orderDetails.setVisible(true);
+	    itemsList.setVisible(true);
+		itemsList.setVisible(true);
+		orderPanel.setVisible(true);
+		orderMenu.setVisible(true);
+		frame.setVisible(true);
 	}
 	
 	private class MCL implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-
-			if(itemsPane != null){
-				itemsPane.setVisible(false);
-				orderDetails.setVisible(false);
-				statusLabel.setVisible(false);
-				statusList.setVisible(false);
-				
-				orderPanel.remove(statusLabel);
-				orderPanel.remove(statusList);
-				orderPanel.remove(itemsList);
-				orderPanel.remove(orderDetails);
-			}
-			int row = ordersList.getSelectedRow();
-			CustOrder co = new CustOrder();
-			String[][] orders = co.getOrders();
+			displayOrder();
 			
-			orderID = orders[row][0];
-			
-			
-			System.out.println("ROW: " + row);
-			System.out.println("ORDER ID: " + orderID);
-			
-			String[] columnNames = {"Product ID","Product", "Description", "Quantity", "Price", "Warehouse Location"};
-			
-		    itemsList = new JTable(co.getOrderItems(orderID), columnNames);
-		    
-		    itemsPane = new JScrollPane(itemsList);
-		    
-		    orderDetails = new JTextArea();
-		    
-		    String[] orderdeets = co.getOrderDetails(orderID);
-		    
-		    orderDetails.setText(
-		    					"Order ID: \t" + orderdeets[0] + "\n\n" + 
-		    					"Customer: \t" + orderdeets[1] + " " + orderdeets[2] + "\n\n" + 
-		    					"Order Placed: \t" + orderdeets[3] + "\n\n" + 
-		    					"GDZ: \t" + orderdeets[4] + "\n\n" + 
-		    					"Current Status: \t" + orderdeets[5]);
-		    
-		    orderPanel.add(orderDetails);
-		    
-		    statusLabel = new JLabel();
-		    
-		    statusLabel.setText("Status: ");
-		    
-		    orderPanel.add(statusLabel);
-		    
-		    
-		    String[] statuses = {"Incomplete","Pending", "Packed", "Delivery", "Complete"};
-		    
-		    statusList = new JComboBox(statuses);
-		    
-		    statusList.addActionListener(new CBL());
-		    
-		    orderPanel.add(statusList);
-		    
-		    
-			orderPanel.add(itemsPane);
-		    
-			statusLabel.setVisible(true);
-			statusList.setVisible(true);
-			orderDetails.setVisible(true);
-		    itemsList.setVisible(true);
-			itemsList.setVisible(true);
-			orderPanel.setVisible(true);
-			orderMenu.setVisible(true);
-			frame.setVisible(true);
 		}
 
 		@Override

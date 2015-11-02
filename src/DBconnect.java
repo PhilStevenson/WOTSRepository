@@ -10,11 +10,12 @@ import java.util.Map;
 public class DBconnect {
 	
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://10.50.15.23:8889/wots";
+//	static final String DB_URL = "jdbc:mysql://10.50.15.23:8889/wots";
+	static final String DB_URL = "jdbc:mysql://localhost:8889/wots";
 	
 	static final String USER = "root";
-//	static final String PASS = "root";
-	static final String PASS = "Passw0rd";
+	static final String PASS = "root";
+//	static final String PASS = "Passw0rd";
 	
 	private Connection conn = null;
 	private Statement stmt = null;
