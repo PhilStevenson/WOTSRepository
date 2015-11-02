@@ -89,7 +89,7 @@ public class CustOrder extends Order {
 	
 	public String[] getOrderDetails(String id) {
 		
-		String[] orderDetails = new String[5];
+		String[] orderDetails = new String[6];
 		Customer cus = new Customer();
 		CustOrder co = con.getOrder(id);
 		
@@ -130,6 +130,10 @@ public class CustOrder extends Order {
 			i++;
 		}
 		return lines;
+	}
+	
+	public void updateStatus(String id, String status) {
+		con.updateCustOrder(id, status);
 	}
 	
 }

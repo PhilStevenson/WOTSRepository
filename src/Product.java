@@ -58,4 +58,9 @@ public class Product {
 		
 		prod = con.getProduct(id);
 	}
+	
+	public void updateStock(String id, int newStock) {
+		con.updateStock(id, newStock);
+		
+	}
 }

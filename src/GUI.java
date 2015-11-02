@@ -13,7 +13,12 @@ public class GUI extends JFrame {
 	private JPanel orderPanel = new JPanel();
 	private JTable ordersList;
 	private JTable itemsList;
-	JScrollPane itemsPane;
+	private JScrollPane itemsPane;
+	private JTextArea orderDetails;
+	private JComboBox statusList;
+	private JLabel statusLabel;
+	
+	private String orderID;
 	
 	Container mainMenu = new Container();
 	Container orderMenu = new Container();
@@ -75,7 +80,7 @@ public class GUI extends JFrame {
 		frame.add(orderMenu);
 		orderMenu.add(orderPanel);
 		
-		orderMenu.setLayout(new GridLayout(2,2));
+		orderMenu.setLayout(new FlowLayout());
 		
 		backButton.setActionCommand("back");
 		backButton.addActionListener(new BCL());
@@ -141,6 +146,38 @@ public class GUI extends JFrame {
 		}
 	}
 	
+	private class CBL implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			
+			CustOrder co = new CustOrder();
+			
+			switch(String.valueOf(statusList.getSelectedItem())) {
+				case "Incomplete":
+					co.updateStatus(orderID,"Incomplete");
+					break;
+				case "Pending":
+					co.updateStatus(orderID,"Pending");
+					break;
+				case "Packed":
+					co.updateStatus(orderID,"Pending");
+					break;
+				case "Delivery":
+					co.updateStatus(orderID, "Delivery");
+					break;
+				case "Complete":
+					co.updateStatus(orderID, "Complete");
+					break;
+					
+					//TODO update textarea
+			}
+			
+			System.out.println(statusList.getSelectedItem());
+			
+		}
+	}
+	
 	private class MCL implements MouseListener {
 
 		@Override
@@ -148,13 +185,20 @@ public class GUI extends JFrame {
 
 			if(itemsPane != null){
 				itemsPane.setVisible(false);
+				orderDetails.setVisible(false);
+				statusLabel.setVisible(false);
+				statusList.setVisible(false);
+				
+				orderPanel.remove(statusLabel);
+				orderPanel.remove(statusList);
 				orderPanel.remove(itemsList);
+				orderPanel.remove(orderDetails);
 			}
 			int row = ordersList.getSelectedRow();
 			CustOrder co = new CustOrder();
 			String[][] orders = co.getOrders();
 			
-			String orderID = orders[row][0];
+			orderID = orders[row][0];
 			
 			
 			System.out.println("ROW: " + row);
@@ -165,11 +209,41 @@ public class GUI extends JFrame {
 		    itemsList = new JTable(co.getOrderItems(orderID), columnNames);
 		    
 		    itemsPane = new JScrollPane(itemsList);
-
-		    itemsList.setSize(1000, 500);
-		    itemsPane.setSize(1000, 500);
+		    
+		    orderDetails = new JTextArea();
+		    
+		    String[] orderdeets = co.getOrderDetails(orderID);
+		    
+		    orderDetails.setText(
+		    					"Order ID: \t" + orderdeets[0] + "\n\n" + 
+		    					"Customer: \t" + orderdeets[1] + " " + orderdeets[2] + "\n\n" + 
+		    					"Order Placed: \t" + orderdeets[3] + "\n\n" + 
+		    					"GDZ: \t" + orderdeets[4] + "\n\n" + 
+		    					"Current Status: \t" + orderdeets[5]);
+		    
+		    orderPanel.add(orderDetails);
+		    
+		    statusLabel = new JLabel();
+		    
+		    statusLabel.setText("Status: ");
+		    
+		    orderPanel.add(statusLabel);
+		    
+		    
+		    String[] statuses = {"Incomplete","Pending", "Packed", "Delivery", "Complete"};
+		    
+		    statusList = new JComboBox(statuses);
+		    
+		    statusList.addActionListener(new CBL());
+		    
+		    orderPanel.add(statusList);
+		    
+		    
 			orderPanel.add(itemsPane);
 		    
+			statusLabel.setVisible(true);
+			statusList.setVisible(true);
+			orderDetails.setVisible(true);
 		    itemsList.setVisible(true);
 			itemsList.setVisible(true);
 			orderPanel.setVisible(true);

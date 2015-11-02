@@ -74,6 +74,7 @@ public class DBconnect {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return result;
 		
 	}
@@ -92,8 +93,9 @@ public class DBconnect {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-		closeDB();
 	}
 	
 	public ArrayList<String> getIds(String table) {
@@ -116,12 +118,11 @@ public class DBconnect {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			ids = null;
+		} finally {
+			closeDB();
 		}
 	
 		
-		
-		
-		closeDB();
 		return ids;
 	}
 	
@@ -150,8 +151,9 @@ public class DBconnect {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-		
 		return cus;
 	}
 	
@@ -179,9 +181,9 @@ public class DBconnect {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-		
-		
 		return orders;
 	}
 	
@@ -203,8 +205,9 @@ public class DBconnect {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-		
 		return cord;
 	}
 	
@@ -224,8 +227,9 @@ public class DBconnect {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-		
 		return ols;
 	}
 	
@@ -245,8 +249,9 @@ public class DBconnect {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
-		
 		return prod;
 	}
 	
@@ -296,7 +301,7 @@ public class DBconnect {
 		} else {
 			System.out.println("This record already exists!");
 		}
-		
+		closeDB();
 		//System.out.println(result);
 		
 //		System.out.println("The records selected are:");
@@ -395,14 +400,31 @@ public class DBconnect {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeDB();
 		}
 		
 		System.out.println(postcode);
 		
 		return postcode;
+	
 		
 	}
-
+	
+	public void updateCustOrder(String id, String status) {
+		String query = "UPDATE custorder SET status = '" + status + "' WHERE id = '" + id + "'";
+		
+		updateDB(query);
+		
+	}
+	
+	public void updateStock(String id, int newStock){
+		String query = "UPDATE product SET stockunits = '" + newStock + "' WHERE id = '" + id + "'";
+		
+		updateDB(query);
+	}
+	
+	
 	
 	public void addProduct(String prodID, String name, String description, double price) {
 		
