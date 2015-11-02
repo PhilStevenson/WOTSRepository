@@ -112,7 +112,7 @@ public class CustOrder extends Order {
 		
 		ArrayList<OrderLine> orderLines = con.getOrderLines(id);
 		
-		String[][] lines = new String[orderLines.size()][5];
+		String[][] lines = new String[orderLines.size()][6];
 		
 		
 		
@@ -126,6 +126,7 @@ public class CustOrder extends Order {
 			lines[i][2]	= prod.description;
 			lines[i][3] = ol.quantity;
 			lines[i][4] = String.valueOf(prod.price);
+			lines[i][5] = prod.location;
 			i++;
 		}
 		return lines;

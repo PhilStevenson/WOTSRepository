@@ -10,7 +10,7 @@ import java.util.Map;
 public class DBconnect {
 	
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://127.0.0.1:8889/wots";
+	static final String DB_URL = "jdbc:mysql://10.50.15.23:8889/wots";
 	
 	static final String USER = "root";
 //	static final String PASS = "root";
@@ -240,6 +240,7 @@ public class DBconnect {
 				prod.name = res.getString("name");
 				prod.description = res.getString("description");
 				prod.price = res.getDouble("price");
+				prod.location = res.getString("location");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

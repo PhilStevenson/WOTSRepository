@@ -7,6 +7,7 @@ public class Product {
 	protected String name;
 	protected String description;
 	protected double price;
+	protected String location;
 	
 	DBconnect con = new DBconnect();
 	

@@ -26,23 +26,18 @@ public class GUI extends JFrame {
 	}
 
 	
-	public void init()
-	{
+	public void init() {
 	
 	Toolkit tk = Toolkit.getDefaultToolkit();
 	int xSize = ((int) tk.getScreenSize().getWidth());
 	int ySize = ((int) tk.getScreenSize().getHeight());
 	frame.setSize(xSize,ySize);
 	
-
-	
 	mainMenu();
 	frame.setVisible(true);
 	}
 	
 	private void mainMenu() {
-		
-		
 		
 		frame.add(mainMenu);
 		mainMenu.add(mainPanel);
@@ -74,7 +69,7 @@ public class GUI extends JFrame {
 	
 	private void processOrder() {
 		mainMenu.setVisible(false);
-		JButton exitButton = new JButton("Exit");
+		JButton backButton = new JButton("Back");
 		CustOrder co = new CustOrder();
 				
 		frame.add(orderMenu);
@@ -82,8 +77,8 @@ public class GUI extends JFrame {
 		
 		orderMenu.setLayout(new GridLayout(2,2));
 		
-		exitButton.setActionCommand("exit");
-		exitButton.addActionListener(new BCL());
+		backButton.setActionCommand("back");
+		backButton.addActionListener(new BCL());
 		
 		
 		
@@ -105,9 +100,9 @@ public class GUI extends JFrame {
 	    
 		ordersList.addMouseListener(new MCL());
 		
-		orderPanel.add(exitButton);
+		orderPanel.add(backButton);
 		JScrollPane ordersPane = new JScrollPane(ordersList);
-		//orderPanel.add(ordersList);
+
 		orderPanel.add(ordersPane);
 		
 		ordersList.setVisible(true);
@@ -137,6 +132,11 @@ public class GUI extends JFrame {
 				case "exit": 
 					System.exit(0);
 				break;
+				case "back":
+					orderMenu.removeAll();
+					orderPanel.removeAll();
+					orderMenu.setVisible(false);
+					mainMenu.setVisible(true);
 			}
 		}
 	}
@@ -160,12 +160,14 @@ public class GUI extends JFrame {
 			System.out.println("ROW: " + row);
 			System.out.println("ORDER ID: " + orderID);
 			
-			String[] columnNames = {"Product ID","Product", "Description", "Quantity", "Price"};
+			String[] columnNames = {"Product ID","Product", "Description", "Quantity", "Price", "Warehouse Location"};
 			
 		    itemsList = new JTable(co.getOrderItems(orderID), columnNames);
 		    
 		    itemsPane = new JScrollPane(itemsList);
-			//orderPanel.add(ordersList);
+
+		    itemsList.setSize(1000, 500);
+		    itemsPane.setSize(1000, 500);
 			orderPanel.add(itemsPane);
 		    
 		    itemsList.setVisible(true);
