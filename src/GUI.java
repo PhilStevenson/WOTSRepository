@@ -277,7 +277,10 @@ public class GUI extends JFrame {
 		
 	}
 	
+	// display order displays all of the order details with the items included in the order
 	private void displayOrder() {
+		
+		// if the components are already added remove them before continuing  
 		if(itemsPane != null){
 			itemsPane.setVisible(false);
 			orderDetails.setVisible(false);
@@ -290,26 +293,38 @@ public class GUI extends JFrame {
 			orderPanel.remove(orderDetails);
 		}
 		
+		// get the selected row and store it in a class variable 
 		itemsListIndex = ordersList.getSelectedRow();
+		
+		// create new customer order object
 		CustOrder co = new CustOrder();
+		
+		// all orders and store in an array
 		String[][] orders = co.getOrders();
 		
+		// get the current id from the selected index of the orderslist
 		currentOrderID = orders[itemsListIndex][0];
 		
 		
 		//System.out.println("ROW: " + itemsListIndex);
 		//System.out.println("ORDER ID: " + currentOrderID);
 		
+		// create the column headings for the items list
 		String[] columnNames = {"Product ID","Product", "Description", "Ordered Quantity", "Stock", "Price", "Warehouse Location"};
 		
+		// create a new Jtable for the items list
 	    itemsList = new JTable(co.getOrderItems(currentOrderID), columnNames);
 	    
+	    // put the items list in a scroll pane, creates the headings
 	    itemsPane = new JScrollPane(itemsList);
 	    
+	    // create a new text area
 	    orderDetails = new JTextArea();
 	    
+	    // get the order details and store them
 	    String[] orderdeets = co.getOrderDetails(currentOrderID);
 	    
+	    // set the text area to show the order details, with formatting 
 	    orderDetails.setText(
 	    					"Order ID: \t" + orderdeets[0] + "\n\n" + 
 	    					"Customer: \t" + orderdeets[1] + " " + orderdeets[2] + "\n\n" + 
@@ -317,26 +332,34 @@ public class GUI extends JFrame {
 	    					"GDZ: \t" + orderdeets[4] + "\n\n" + 
 	    					"Current Status: \t" + orderdeets[5]);
 	    
+	    // add order details to order panel
 	    orderPanel.add(orderDetails);
 	    
+	    // create a new label for the status 
 	    statusLabel = new JLabel();
 	    
+	    // set the status label text
 	    statusLabel.setText("Status: ");
 	    
+	    // add the status label to the order panel
 	    orderPanel.add(statusLabel);
 	    
-	    
+	    // create a new combobox for status
 	    statusList = new JComboBox(statuses);
 	    
+	    // set the combobox to the current status
 	    statusList.setSelectedItem(orderdeets[5]);
 	    
+	    // create action listener for the combo box
 	    statusList.addActionListener(new CBL());
 	    
+	    // add status list to the order panel
 	    orderPanel.add(statusList);
 	    
-	    
+	    // add the itemspane to the order panel 
 		orderPanel.add(itemsPane);
 	    
+		// set the components to visible 
 		statusLabel.setVisible(true);
 		statusList.setVisible(true);
 		orderDetails.setVisible(true);
@@ -351,7 +374,7 @@ public class GUI extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			displayOrder();
+			displayOrder(); // when a order is selected, execute display order
 			
 		}
 
