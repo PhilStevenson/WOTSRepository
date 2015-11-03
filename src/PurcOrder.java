@@ -3,6 +3,7 @@ import java.util.Collections;
 
 public class PurcOrder extends Order{
 	
+	// Generator for Stock Order ID
 	private String genID() {
 		String newId = "POR";
 		
