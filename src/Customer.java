@@ -3,21 +3,11 @@ import java.util.Collections;
 
 
 public class Customer {
-
+	
+	// creates the database connect object
 	DBconnect con = new DBconnect();
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-
-	public void setFirstName(String firstName) {
-		
-		this.firstName = firstName;
-
-	}
-
-
+	// Object Variables
 	protected String firstName;
 	protected String surName;
 	protected String email;
@@ -42,7 +32,8 @@ public class Customer {
 	public Customer() {
 		
 	}
-	
+	// generates new ID for the CUSTOMER table
+	// see CustOrder.genID() for comments
 	private String genID() {
 		String newId = "CUS";
 		
@@ -78,12 +69,14 @@ public class Customer {
 		
 	}
 	
+	// get the customers details
 	public Customer getCusDetails(String custID) {
 		
 		return con.getCustomer(custID);
 		
 	}
 	
+	// creates a new customer
 	public void newCustomer(String fname, String surname, String email, String tel, String addfline,
 			String addsline, String addtowncity, String addcounty, String addcountry, String addpostcode,
 			double credit, String cardnum, String cardname, String cardexp, String secnum){

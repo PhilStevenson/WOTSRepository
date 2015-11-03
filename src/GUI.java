@@ -9,6 +9,7 @@ import java.awt.event.*;
 
 public class GUI extends JFrame {
 	
+	
 	private JPanel mainPanel = new JPanel();
 	private JPanel orderPanel = new JPanel();
 	private JTable ordersList;
@@ -36,68 +37,89 @@ public class GUI extends JFrame {
 	
 	public void init() {
 	
+	// this sets the jframe window to the size of the screen
 	Toolkit tk = Toolkit.getDefaultToolkit();
 	int xSize = ((int) tk.getScreenSize().getWidth());
 	int ySize = ((int) tk.getScreenSize().getHeight());
 	frame.setSize(xSize,ySize);
 	orderMenu.setSize(xSize, ySize);
-	mainMenu();
-	frame.setVisible(true);
+	
+	
+	mainMenu();		// call the mainMenu
+	
+	frame.setVisible(true); 	//make the frame visible
 	}
 	
+	// creates the Main menu
 	private void mainMenu() {
 		
+		// add main components 
 		frame.add(mainMenu);
 		mainMenu.add(mainPanel);
 		
+		// set the layout, not sure this even does anything
 		mainMenu.setLayout(new FlowLayout());
 		
-		
+		// create new buttons
 		JButton orderButton = new JButton("Process Order");
 		JButton stockButton = new JButton("Process Stock");
 		JButton exitButton = new JButton("Exit");
 		
+		//set the commands for the buttons 
 		orderButton.setActionCommand("processOrder");
 		stockButton.setActionCommand("processStock");
 		exitButton.setActionCommand("exit");
 		
-		
+		// create action listeners for buttons
 		orderButton.addActionListener(new BCL());
 		stockButton.addActionListener(new BCL());
 		exitButton.addActionListener(new BCL());
 		
+		// add the buttons the main panel
 		mainPanel.add(orderButton);
 		mainPanel.add(stockButton);
 		mainPanel.add(exitButton);
 		
-		
+		// set the components visible
 		mainMenu.setVisible(true);
 		mainPanel.setVisible(true);
 	}
 	
+	
+	// creates the process order menu called when the process order button is pressed
 	private void processOrder() {
 		
+		// ensure the panel is empty
 		orderPanel.removeAll();
 		
+		// hide the main menu
 		mainMenu.setVisible(false);
+		
+		// create a back button
 		JButton backButton = new JButton("Back");
+		
+		// create a new custorder object
 		CustOrder co = new CustOrder();
-				
+		
+		// add the orderMenu to the frame
 		frame.add(orderMenu);
+		// add the order panel to the order menu
 		orderMenu.add(orderPanel);
 		
+		// set the layout of the order menu
 		orderMenu.setLayout(new FlowLayout());
 		
+		//create the command and action listener for the back button
 		backButton.setActionCommand("back");
 		backButton.addActionListener(new BCL());
 		
-		
-		
+		// create column headings for the list of orders
 		String[] columnNames = {"Order ID",	"GDZone", "Order Placed", "Status"};
 		
 		//JList ordersList = new JList(co.printOrders());
 		ordersList = new JTable(co.getOrders(), columnNames);
 		
+		// taken this from somewhere to get help the jtables work but actually don remember if it makes a difference
 	    TableColumn column = null;
 	    for (int i = 0; i < 3; i++) {
 	        column = ordersList.getColumnModel().getColumn(i);
@@ -108,22 +130,29 @@ public class GUI extends JFrame {
 	        }
 	    }
 	    
-	    
+	    // create a mouse listener for the order list
 		ordersList.addMouseListener(new MCL());
 		
+		// add the back button to the order panel
 		orderPanel.add(backButton);
+		
+		// add the orders list to a new scroll pane, this is needed to insure the column headings are displayed
 		JScrollPane ordersPane = new JScrollPane(ordersList);
 
+		//add the orderspane to the order panel
 		orderPanel.add(ordersPane);
 		
+		// set everything visible
 		ordersList.setVisible(true);
 		orderPanel.setVisible(true);
 		orderMenu.setVisible(true);
 		frame.setVisible(true);
-	
-
 	}
 
+	// Overloaded method to provide functionality  for displaying a specific order when the GUI is rendered
+	// therefore all comments pretty much the same
+	
+	// this should be changed now as orderID argument is no longer used
 	private void processOrder(String orderID) {
 		
 		orderPanel.removeAll();
@@ -139,8 +168,6 @@ public class GUI extends JFrame {
 		
 		backButton.setActionCommand("back");
 		backButton.addActionListener(new BCL());
-		
-		
 		
 		String[] columnNames = {"Order ID",	"GDZone", "Order Placed", "Status"};
 		
@@ -171,31 +198,32 @@ public class GUI extends JFrame {
 
 		frame.setVisible(true);
 		
-		displayOrder();
+		displayOrder(); // this is an addition to this overloaded method 
 
 	}
 
-
+	// This method is to create the process stock menu
 	private void processStock() {
 		
 	}
 	
+	// action listener for the buttons 
 	private class BCL implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 		String command = ae.getActionCommand();
 			switch (command) {
 				case "processOrder":
-					processOrder();
+					processOrder();		// when the process order button is pressed then create process order menu
 					
 				break;
 				case "processStock":
 					
 				break;
 				case "exit": 
-					System.exit(0);
+					System.exit(0); 	// exit the system 
 				break;
-				case "back":
+				case "back":			// open the main menu
 					orderMenu.removeAll();
 					orderPanel.removeAll();
 					orderMenu.setVisible(false);
@@ -204,6 +232,7 @@ public class GUI extends JFrame {
 		}
 	}
 	
+	// Action listener for change of drop down for order status
 	private class CBL implements ActionListener {
 
 		@Override
@@ -212,6 +241,9 @@ public class GUI extends JFrame {
 			CustOrder co = new CustOrder();
 			Product p = new Product();
 			
+			// case statements change the order to the appropriate status.
+			// the statuses are in order of the process and therefore when the order gets to the packing status the stock is allocated to the order and the stock level is updated
+			// this is the same for the later statuses apart from cancelled and for the statuses that come before packing there is a method to un-allocate stock, this is also used in the cancelled status 
 			switch(String.valueOf(statusList.getSelectedItem())) {
 				case "Incomplete":
 					co.updateStatus(currentOrderID,"Incomplete");
@@ -236,7 +268,6 @@ public class GUI extends JFrame {
 				case "Cancelled":
 					co.updateStatus(currentOrderID, "Cancelled");
 					p.unAllocateStock(currentOrderID);
-					//TODO update textarea
 			}
 			
 			//Reinitialise

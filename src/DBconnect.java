@@ -9,6 +9,9 @@ import java.util.Map;
 
 public class DBconnect {
 	
+	
+	// DATABASE CONNECTION VARIABLES
+	
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	static final String DB_URL = "jdbc:mysql://10.50.15.8:8889/wots";
 //	static final String DB_URL = "jdbc:mysql://localhost:8889/wots";
@@ -24,7 +27,7 @@ public class DBconnect {
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 	
-	
+	// Creates a connection to the database
 	private void accessDB() {
 	
 		try {
@@ -41,6 +44,8 @@ public class DBconnect {
 		
 	}
 	
+	
+	// Close the connection to the database
 	private void closeDB() {
 		try {
 			conn.close();
@@ -56,10 +61,10 @@ public class DBconnect {
 	
 	
 	
-	
+	//query the database returning a set of records
 	private ResultSet queryDB(String query) {
 		
-		accessDB();
+		accessDB();			//Access Database
 		
 		ResultSet result = null;
 		
@@ -69,71 +74,74 @@ public class DBconnect {
 	        //System.out.println("queryDB: The SQL query is: " + query); // Echo For debugging
 	        //System.out.println();
 	 
-	        result = stmt.executeQuery(query);
+	        result = stmt.executeQuery(query); 		// Execute the query and store the result
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); 		// Catch SQL errors and print to console
 		}
 		
-		return result;
+		return result;		// return the result of the query
 		
 	}
 	
+	// to query the database without a result to return
 	private void updateDB(String query) {
-		accessDB();
+		accessDB();		// Connect to the database
+		
 		try {
-			Statement stmt = conn.createStatement();
+			Statement stmt = conn.createStatement();	
 			
 	        System.out.println("updateDB: The SQL query is: " + query); // Echo For debugging
 	        System.out.println();
-	 
-	        //result = stmt.executeQuery(query);
-	        stmt.executeUpdate(query);
+	        
+	        stmt.executeUpdate(query); 		// query the database with the string query
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();		// Catch SQL errors and print to console
 		} finally {
-			closeDB();
+			closeDB();		//Close the database
 		}
 	}
 	
+	// Get all IDs for a specific table
 	public ArrayList<String> getIds(String table) {
-	
 		
 		ArrayList<String> ids = new ArrayList<String>();
 		
-		ResultSet result = queryDB("SELECT id FROM " + table);
-		
-
-		
+		ResultSet result = queryDB("SELECT id FROM " + table); 		// query the database
 
 		try {
 			
-			while(result.next()) {   // Move the cursor to the next row
-				String id = result.getString("id");
-				ids.add(id);
+			while(result.next()) {   // for each record in the query
+				
+				String id = result.getString("id");		// get the id from the record	
+				
+				ids.add(id);	// add the id to the array of IDs
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			ids = null;
+			e.printStackTrace(); 	// Catch the SQL errors and print them to the console
+			ids = null;		// make IDs null as there won't be any to return
 		} finally {
-			closeDB();
+			closeDB(); 	// close the database connection
 		}
 	
 		
-		return ids;
+		return ids;		// return the IDs
 	}
 	
+	
+	// Get customer object from the Customer ID
 	public Customer getCustomer(String custID) {
-		String query = "SELECT * FROM customer WHERE id = '" + custID + "';";
-		Customer cus = new Customer();
-		ResultSet res = queryDB(query);
+		String query = "SELECT * FROM customer WHERE id = '" + custID + "';";		// query the database for details of a specific customer
+		
+		Customer cus = new Customer();			// create new customer object
+		
+		ResultSet res = queryDB(query);			// query the database
 		
 		try {
-			while(res.next()) {
+			
+			// take all of the customer details from the database and store them in the customer object
+			while(res.next()) {	
 				cus.firstName = res.getString("firstName");
 				cus.surName = res.getString("surName");
 				cus.email = res.getString("email");
@@ -151,51 +159,58 @@ public class DBconnect {
 				cus.cardSecNum = res.getString("cardSecNum");
 			}
 		} catch(SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace();		// Catch SQL errors and print to console
 		} finally {
-			closeDB();
+			closeDB();			// close database
 		}
-		return cus;
+		return cus;		// return the customer object
 	}
 	
+	// get all customer/sales orders from the database
 	public ArrayList<CustOrder> getOrders() {
 		
+		String query = "SELECT * FROM custorder ;";		// query all from custorder table
 		
-		String query = "SELECT * FROM custorder ;";
-		ArrayList<CustOrder> orders = new ArrayList<CustOrder>();
-		ResultSet res = queryDB(query);
+		ArrayList<CustOrder> orders = new ArrayList<CustOrder>();		//create and arrayList of Customer Orders
+		
+		ResultSet res = queryDB(query);		// Query the database
 		
 		try {
-			while(res.next()) {   // Move the cursor to the next row
-				CustOrder cord = new CustOrder();
+			while(res.next()) {   // for each record in the database
 				
+				CustOrder cord = new CustOrder();	// create new customer order object
 				
-				cord.id = res.getString("id");
+				// add all details from the database to the object
+				cord.id = res.getString("id");		
 				cord.custID = res.getString("custID");
 				cord.dateTime = res.getString("dateTime");
 				cord.zone = res.getString("zone");
 				cord.status = res.getString("status");
 				
-				orders.add(cord);
-			
+				orders.add(cord);		// add the order to the array
 			}
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); 		// Catch SQL erros and print to console
 		} finally {
-			closeDB();
+			closeDB();		// close database
 		}
-		return orders;
+		return orders;		// return all of the orders
 	}
 	
+	// gets a specific order and returns it as an object
 	public CustOrder getOrder(String id) {
-		String query = "SELECT * FROM custorder WHERE id = '" + id + "';";
-		ResultSet res = queryDB(query);
-		CustOrder cord = new CustOrder();
+		
+		String query = "SELECT * FROM custorder WHERE id = '" + id + "';"; 		// query the database for a particular order
+		
+		ResultSet res = queryDB(query);		// Execute the query
+		
+		CustOrder cord = new CustOrder(); 	// create a new object of customer order
 		
 		try {
-			while(res.next()) {   // Move the cursor to the next row
+			while(res.next()) { 
 				
+				// add the order details to the customer order object
 				cord.id = res.getString("id");
 				cord.custID = res.getString("custID");
 				cord.dateTime = res.getString("dateTime");
@@ -204,59 +219,72 @@ public class DBconnect {
 				cord.stockAllocated = res.getBoolean("stockallocated");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();	// Catch errors and print to console
 		} finally {
-			closeDB();
+			closeDB();		// close database connection
 		}
-		return cord;
+		return cord;	// return the customer order
 	}
 	
+	// get the order lines of a specific order
 	public ArrayList<OrderLine> getOrderLines(String orderID) {
-		String query = "SELECT * FROM orderline WHERE orderID = '" + orderID + "';";
-		ResultSet res = queryDB(query);
-		ArrayList<OrderLine> ols = new ArrayList<OrderLine>();
+		
+		String query = "SELECT * FROM orderline WHERE orderID = '" + orderID + "';";	// the query is getting bored now
+		
+		ResultSet res = queryDB(query);		// execute the query
+		
+		ArrayList<OrderLine> ols = new ArrayList<OrderLine>();		// create a arrayList of order lines
 		
 		try {
-			while(res.next()) {   // Move the cursor to the next row
-				OrderLine ol = new OrderLine();
+			while(res.next()) {   // for each order in the database table
+				
+				OrderLine ol = new OrderLine(); 	// create a new order line object
+				
+				// add the data from the database to the object
 				ol.orderID = res.getString("orderID");
 				ol.productID = res.getString("productID");
 				ol.quantity = res.getString("quantity");
-				ols.add(ol);
+				
+				ols.add(ol);	// add the orderline object to the array
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();	// Catch errors and print to console
 		} finally {
-			closeDB();
+			closeDB();		// close the database connection
 		}
-		return ols;
+		return ols;		// return the orderlines
 	}
 	
+	// gets the details of a specific product
 	public Product getProduct(String productID) {
-		String query = "SELECT * FROM product WHERE id = '" + productID + "';";
-		ResultSet res = queryDB(query);
-		Product prod = new Product();
+		String query = "SELECT * FROM product WHERE id = '" + productID + "';";		// this is a sql query, I know what it means
+		
+		ResultSet res = queryDB(query);		// execute the query and store the result
+		
+		Product prod = new Product();	// create a new product object
 		
 		try {
-			while(res.next()) {   // Move the cursor to the next row
+			while(res.next()) { 
+				
+				// add the data from the database into the object
 				prod.ID = res.getString("id");
 				prod.name = res.getString("name");
 				prod.description = res.getString("description");
 				prod.price = res.getDouble("price");
 				prod.location = res.getString("location");
 				prod.stockUnits = res.getInt("stockunits");
+				
+				
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();	// still does the same thing as last time
 		} finally {
-			closeDB();
+			closeDB();		// you guessed it, Closes the database connection
 		}
-		return prod;
+		return prod;	// returns the product.
 	}
 	
+	// used to add a new customer to the database
 	public void addCustomer(
 							String id,
 							String firstName,
@@ -275,11 +303,12 @@ public class DBconnect {
 							String cardExpiry,
 							String cardSecNum) {
 		
-		ArrayList<String> ids = getIds("customer");
+		ArrayList<String> ids = getIds("customer");		// get all the current IDs for the customer table
 		
-		if (!ids.contains(id))
+		if (!ids.contains(id))		// only if the id doesn't exist in the database
 		{
-		
+			
+			// query to add all the details
 			String query = "INSERT INTO customer VALUES ('" 
 													+ id + "', '"
 													+ firstName + "', '" 
@@ -298,26 +327,15 @@ public class DBconnect {
 													+ cardExpiry + "', '"
 													+ cardSecNum + "');";
 		
-			updateDB(query);
+			updateDB(query); 	// execute the database
 			
 		} else {
-			System.out.println("This record already exists!");
+			System.out.println("This record already exists!");	// if the ID already exists, print to console
 		}
-		closeDB();
-		//System.out.println(result);
-		
-//		System.out.println("The records selected are:");
-//		int rowCount = 0;
-//		while(rset.next()) {   // Move the cursor to the next row
-//			String title = rset.getString("title");
-//			double price = rset.getDouble("price");
-//			int    qty   = rset.getInt("qty");
-//			System.out.println(title + ", " + price + ", " + qty);
-//			++rowCount;
-//		}
-//		System.out.println("Total number of records = " + rowCount);
+		closeDB();		// close database
 	}
 	
+	// This method adds a new customer order
 	public void addCustOrder(
 							String id,
 							String custID,
@@ -325,94 +343,93 @@ public class DBconnect {
 							String zone,
 							String status) {
 		
-		//orderline = new HashMap<String,String>();
+		ArrayList<String> ids = getIds("custorder"); 	// get all current IDs for custorder		
 		
-		ArrayList<String> ids = getIds("custorder");		
-		
-		if (!ids.contains(id))
+		if (!ids.contains(id))		// only if the IDs does not already exist in the database
 		{
-			
+			// Insert query
 			String query = "INSERT INTO custorder VALUES ('" 
 											+ id + "', '"
 											+ custID + "', '" 
 											+ dateTime + "', '" 
 											+ zone + "', '"
 											+ status+ "');";
-			updateDB(query);
+			updateDB(query);	// Execute query
 			
-			
-			
-			/**
-			 * create 2 dimensional array to store products and quantity for an order 
-			 * then insert into orderline DB
-			 *  
-			 */
 		
 		} else {
-			
+			//if the record already exists then print to console
 			System.out.println("This record already exists!");
 		}
-		
-		
-		
 	}
 
+	// add products to a specific order
 	public void addOrderItem(String orderID, String prodID, String quant) {
-		String query;
-		boolean ex = false;
-		ResultSet result = queryDB("SELECT orderID, productID FROM orderline");
+		
+		// initialise variables
+		String query = "SELECT orderID, productID FROM orderline";
+		boolean exists = false;
+		
+		ResultSet result = queryDB(query);		// query the database and store the results
 
 		try {
 			
-			while(result.next()) {   // Move the cursor to the next row
+			// compare the current orderlines with the new orderline and if same then make exists=true
+			while(result.next()) {  
 				String oid = result.getString("orderID");
 				String pid = result.getString("productID");
 				
 				if (oid.equals(orderID) && pid.equals(prodID)) {
-					ex = true;
+					exists = true;
 				}
 			}
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();	// Catch errors and print to console
 		} finally {
-			closeDB();
+			closeDB();		// close the database connection
 		}
 	
-		if(ex) {
-			System.out.println("Record Already Exsists!");
+		if(exists) {
+			System.out.println("Record Already Exsists!"); 	// if there is a duplicate record, print to console
 		} else {
+			
+			// add the orderline to the database
 			query = "INSERT INTO orderline VALUES ('" + orderID + "','" + prodID + "','" + quant + "');";
 			updateDB(query);
 		}
 		
 	}
 	
+	
+	// get the postcode of a specific customer
 	public String getPostcode(String custID) {
 
+		// Initialise variables
 		String postcode = null;
 		String query = "SELECT addressPostcode FROM customer WHERE id = '" + custID + "';";
 		
-		ResultSet res = queryDB(query);
+		
+		ResultSet res = queryDB(query);		// execute the query and store the results
 		
 		try {
 			while(res.next()) {   // Move the cursor to the next row
-				postcode = res.getString("addressPostcode");
+				postcode = res.getString("addressPostcode");	// add database value to a postcode String
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();	// catch the errors and print to console
 		} finally {
-			closeDB();
+			closeDB();		// close the database
 		}
 		
-		System.out.println(postcode);
+		//System.out.println(postcode); // print the post code to the console
 		
-		return postcode;
+		return postcode;	// Return the postcode
 	
 		
 	}
 	
+	// updates the customer order status for a specific order
 	public void updateCustOrder(String id, String status) {
 		String query = "UPDATE custorder SET status = '" + status + "' WHERE id = '" + id + "'";
 		
@@ -420,12 +437,14 @@ public class DBconnect {
 		
 	}
 	
+	// updates the stock level for a specific product
 	public void updateStock(String id, int newStock){
 		String query = "UPDATE product SET stockunits = '" + newStock + "' WHERE id = '" + id + "'";
 		
 		updateDB(query);
 	}
 	
+	// updates the stockAllocated variable for a specific customer order
 	public void updateStockAllocation(String orderID, boolean allocated) {
 		
 		String query;
@@ -438,6 +457,7 @@ public class DBconnect {
 		updateDB(query);
 	}
 	
+	// returns the boolean value of stock allocated variable
 	public boolean isStockAllocated(String orderID) {
 		
 		String query = "SELECT stockallocated FROM CustOrder WHERE id = '" + orderID + "'";
@@ -459,7 +479,7 @@ public class DBconnect {
 	}
 	
 	
-	
+	// adds a product to the database
 	public void addProduct(String prodID, String name, String description, double price) {
 		
 		String query = "INSERT INTO product VALUES ('" + prodID + "', '" + name + "', '" + description + "', " + String.valueOf(price) + ");";

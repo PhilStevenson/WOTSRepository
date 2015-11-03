@@ -3,6 +3,7 @@ import java.util.Collections;
 
 public class Product {
 	
+	// Product Variables
 	protected String ID;
 	protected String name;
 	protected String description;
@@ -10,12 +11,15 @@ public class Product {
 	protected String location;
 	protected int stockUnits;
 	
+	// create new instance of DBconnect
 	DBconnect con = new DBconnect();
 	
 	public Product() {
 		
 	}
 	
+	// generates new ID for the Product table
+	// see CustOrder.genID() for comments
 	private String genID() {
 		String newId = "PRO";
 		
@@ -48,12 +52,15 @@ public class Product {
 		return newId;
 	}
 	
+	
+	// create a new product in the database
 	public void newProduct(String name, String description, double price) {
 		
 		con.addProduct(genID(), name, description, price); 
 		
 	}
-
+	
+	// get the details of a specific product
 	public Product getProductDetails(String id) {
 		Product prod = new Product();
 		
@@ -62,11 +69,13 @@ public class Product {
 		return prod;
 	}
 	
+	// update stock level of specific product
 	public void updateStock(String id, int newStock) {
 		con.updateStock(id, newStock);
 		
 	}
 	
+	// allocates the stock needed to fufill an order, so that the stock cannot be ordered twice
 	public void allocateStock(String orderID) {
 		
 		if(!con.isStockAllocated(orderID)){
@@ -84,6 +93,7 @@ public class Product {
 		}		
 	}
 	
+	// unAllocates the stock that was used to fufill and order, used when orders are cancelled or changed to a state where stock should not be allocated
 	public void unAllocateStock(String orderID) {
 		if(con.isStockAllocated(orderID)){
 			ArrayList<OrderLine> lines = con.getOrderLines(orderID);

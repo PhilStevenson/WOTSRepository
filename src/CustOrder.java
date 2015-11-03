@@ -5,61 +5,75 @@ import java.util.Date;
 
 public class CustOrder extends Order {
 
-	protected boolean stockAllocated = false;
+	protected boolean stockAllocated = false;  // local stock allocated varaiable
 	
+	// generate new id for the customer order
 	private String genID() {
-		String newId = "COR";
+		String newId = "COR";	// Set the ID prefix
 		
-		ArrayList<String> ids = con.getIds("custorder");
-		ArrayList<Integer> idNum = new ArrayList();
+		ArrayList<String> ids = con.getIds("custorder");	// get current IDs from custorder Table
+		ArrayList<Integer> idNum = new ArrayList();			// get a new int arrayList
 		
+		// if there are IDs in the table
 		if(!ids.isEmpty()) {
+			
+			// for each id in ids
 			for (String id : ids) {
 				
-				idNum.add(Integer.valueOf(id.substring(3)));
+				idNum.add(Integer.valueOf(id.substring(3)));	// gets the numerical suffix of the ID
 			}
 			
-			String nxtNum = String.valueOf(Collections.max(idNum)+1);
+			String nxtNum = String.valueOf(Collections.max(idNum)+1);		// get the next number from taking the list of numbers and taking the max and adding 1
 				
+			// works out number of zeros to prepend to the nxtNum
 			int zeros = 5 - nxtNum.length();
 			String zero = "";
 			for( int i=0; i<zeros; i++) {
 				zero = zero + '0';
 			}
-				
-			newId = newId + zero + nxtNum;
-			System.out.println("CustOrder/genID: New ID Generated: " + newId);
+			
+			newId = newId + zero + nxtNum; 	// format the ID to be in the format COR00001
+			
+			System.out.println("CustOrder/genID: New ID Generated: " + newId);  	// print new id to console
 			System.out.println();
+			
 		} else {
-			newId = newId + "00001";
-			System.out.println("CustOrder/genID: First ID Generated: " + newId);
+			
+			// else if there are no IDs already then create the fist one
+			newId = newId + "00001"; 
+			
+			System.out.println("CustOrder/genID: First ID Generated: " + newId);	// print the new id to console
 			System.out.println();
 		}
 
-		return newId;
+		return newId; 	// return the new ID
 	}
 
+	// create a new customer order using the customer id
 	public void newCustOrder(String custID) {
 		
-		Date d = new Date();
+		Date d = new Date();	// get the date time
 		
-		dateTime = String.valueOf(d);
+		dateTime = String.valueOf(d); 	// store the date time as a String
 		
-		String postcode = con.getPostcode(custID);
+		String postcode = con.getPostcode(custID);		// Get the customers postcode
 		
-		zone = postcode.substring(0,4);
+		zone = postcode.substring(0,4);		// create a zone from the first 4 characters of the postcode
 		
-		
+		// Print troubleshooting data
 		System.out.println("Custorder/newCustorder: Zone: " + zone);
 		System.out.println("Custorder/newCustorder: Order Created " + dateTime);
 		
-		con.addCustOrder(genID(), custID, dateTime, zone, "Incomplete");
+		
+		con.addCustOrder(genID(), custID, dateTime, zone, "Incomplete"); 	//add the order to the database
 	}
 	
+	// add new product to an order
 	public void newOrderItem(String orderID, String prodID, int quant) {
 		con.addOrderItem(orderID, prodID, String.valueOf(quant));
 	}
 	
+	// Print all orders to the console
 	public void printOrders() {
 		ArrayList<CustOrder> orders = con.getOrders();
 		Customer cus = new Customer();
@@ -72,6 +86,7 @@ public class CustOrder extends Order {
 		
 	}
 	
+	// get orders ready to be put into a JTABLE, 2D array
 	public String[][] getOrders() {
 		ArrayList<CustOrder> orders = con.getOrders();
 								
@@ -88,7 +103,8 @@ public class CustOrder extends Order {
 		return orderLists;
 		
 	}
-	
+
+	// get the details of a specific order
 	public String[] getOrderDetails(String id) {
 		
 		String[] orderDetails = new String[6];
@@ -104,12 +120,13 @@ public class CustOrder extends Order {
 		orderDetails[4] = co.zone;
 		orderDetails[5] = co.status;
 		
-		//Could Add delivery/customer address
+		//Could Add delivery if different from customer address
 		
 		
 		return orderDetails;
 	}
 	
+	// gets all orderlines ready to be used in a JTABLE, 2D array
 	public String[][] getOrderItems(String id) {
 		
 		ArrayList<OrderLine> orderLines = con.getOrderLines(id);
@@ -133,6 +150,8 @@ public class CustOrder extends Order {
 		return lines;
 	}
 	
+	
+	// updates the ORDER status
 	public void updateStatus(String id, String status) {
 		con.updateCustOrder(id, status);
 		

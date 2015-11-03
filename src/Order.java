@@ -4,6 +4,8 @@ import java.util.Collections;
 
 public class Order {
 	
+	// ORDER superclass for stock order and customer order
+	
 	protected String id;
 	protected String custID;
 	
@@ -11,12 +13,7 @@ public class Order {
 	protected String zone;
 	protected String status;
 	
-	
-	protected enum orderStatus {
-		Pending, Processing, Delivery, Arrived, Closed
-	}
-	
-	DBconnect con = new DBconnect();
+	DBconnect con = new DBconnect();	// create and instance of DBconnect
 	
 	public Order() {
 		

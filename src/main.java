@@ -3,21 +3,18 @@ import java.util.Scanner;
 
 public class main {
 	public static void main(String[] args) {
-		System.out.println("Hello World! This is a TEST");
 		
+		System.out.println("Welcome to the Warehouse Order Tracking System");
 		
-		DBconnect con = new DBconnect();
-		Customer cus = new Customer();
-		CustOrder ord = new CustOrder();
-		Product pro = new Product();
-		
-		
-		GUI gui = new GUI();
+		GUI gui = new GUI();	// Start GUI
 		
 		
 		
-		
-		
+//		DBconnect con = new DBconnect();
+//		Customer cus = new Customer();
+//		CustOrder ord = new CustOrder();
+//		Product pro = new Product();
+//		
 //		pro.newProduct("Halfpint Ben Gnome","A Gnome designed from the famous character Halfpint Ben." , 0.56);
 //		pro.newProduct("Physics Joe Gnome", "A Gnome of Joe who studied physics", 69);
 //		pro.newProduct("The Rampant Mabbett Gnome", "oh Mabbett", 22.5);
