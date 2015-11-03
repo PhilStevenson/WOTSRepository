@@ -19,6 +19,8 @@ public class GUI extends JFrame {
 	private JComboBox statusList;
 	private JLabel statusLabel;
 	
+	private String[] statuses = {"Incomplete","Pending", "Packing", "Delivery", "Complete", "Cancelled"};
+	
 	private String currentOrderID;
 	
 	Container mainMenu = new Container();
@@ -172,6 +174,8 @@ public class GUI extends JFrame {
 		displayOrder();
 
 	}
+
+
 	private void processStock() {
 		
 	}
@@ -206,31 +210,37 @@ public class GUI extends JFrame {
 		public void actionPerformed(ActionEvent ae) {
 			
 			CustOrder co = new CustOrder();
+			Product p = new Product();
 			
 			switch(String.valueOf(statusList.getSelectedItem())) {
 				case "Incomplete":
 					co.updateStatus(currentOrderID,"Incomplete");
+					p.unAllocateStock(currentOrderID);
 					break;
 				case "Pending":
 					co.updateStatus(currentOrderID,"Pending");
+					p.unAllocateStock(currentOrderID);
 					break;
-				case "Packed":
-					co.updateStatus(currentOrderID,"Pending");
+				case "Packing":
+					co.updateStatus(currentOrderID,"Packing");
+					p.allocateStock(currentOrderID);
 					break;
 				case "Delivery":
 					co.updateStatus(currentOrderID, "Delivery");
+					p.allocateStock(currentOrderID);
 					break;
 				case "Complete":
 					co.updateStatus(currentOrderID, "Complete");
+					p.allocateStock(currentOrderID);
 					break;
-					
+				case "Cancelled":
+					co.updateStatus(currentOrderID, "Cancelled");
+					p.unAllocateStock(currentOrderID);
 					//TODO update textarea
 			}
 			
-			//Reinitialize
+			//Reinitialise
 			processOrder(currentOrderID);
-			
-			//System.out.println(statusList.getSelectedItem());
 			
 		}
 		
@@ -256,10 +266,10 @@ public class GUI extends JFrame {
 		currentOrderID = orders[itemsListIndex][0];
 		
 		
-		System.out.println("ROW: " + itemsListIndex);
-		System.out.println("ORDER ID: " + currentOrderID);
+		//System.out.println("ROW: " + itemsListIndex);
+		//System.out.println("ORDER ID: " + currentOrderID);
 		
-		String[] columnNames = {"Product ID","Product", "Description", "Quantity", "Price", "Warehouse Location"};
+		String[] columnNames = {"Product ID","Product", "Description", "Ordered Quantity", "Stock", "Price", "Warehouse Location"};
 		
 	    itemsList = new JTable(co.getOrderItems(currentOrderID), columnNames);
 	    
@@ -284,8 +294,6 @@ public class GUI extends JFrame {
 	    
 	    orderPanel.add(statusLabel);
 	    
-	    
-	    String[] statuses = {"Incomplete","Pending", "Packed", "Delivery", "Complete"};
 	    
 	    statusList = new JComboBox(statuses);
 	    

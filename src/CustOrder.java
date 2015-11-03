@@ -4,6 +4,8 @@ import java.util.Date;
 
 
 public class CustOrder extends Order {
+
+	protected boolean stockAllocated = false;
 	
 	private String genID() {
 		String newId = "COR";
@@ -112,9 +114,7 @@ public class CustOrder extends Order {
 		
 		ArrayList<OrderLine> orderLines = con.getOrderLines(id);
 		
-		String[][] lines = new String[orderLines.size()][6];
-		
-		
+		String[][] lines = new String[orderLines.size()][7];
 		
 		int i = 0;
 		for(OrderLine ol : orderLines) {
@@ -125,8 +125,9 @@ public class CustOrder extends Order {
 			lines[i][1] = prod.name;
 			lines[i][2]	= prod.description;
 			lines[i][3] = ol.quantity;
-			lines[i][4] = String.valueOf(prod.price);
-			lines[i][5] = prod.location;
+			lines[i][4] = String.valueOf(prod.stockUnits);
+			lines[i][5] = String.valueOf(prod.price);
+			lines[i][6] = prod.location;
 			i++;
 		}
 		return lines;
@@ -134,6 +135,7 @@ public class CustOrder extends Order {
 	
 	public void updateStatus(String id, String status) {
 		con.updateCustOrder(id, status);
+		
 	}
 	
 }

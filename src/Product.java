@@ -8,6 +8,7 @@ public class Product {
 	protected String description;
 	protected double price;
 	protected String location;
+	protected int stockUnits;
 	
 	DBconnect con = new DBconnect();
 	
@@ -53,14 +54,49 @@ public class Product {
 		
 	}
 
-	public void getProductDetails(String id) {
+	public Product getProductDetails(String id) {
 		Product prod = new Product();
 		
 		prod = con.getProduct(id);
+		
+		return prod;
 	}
 	
 	public void updateStock(String id, int newStock) {
 		con.updateStock(id, newStock);
 		
+	}
+	
+	public void allocateStock(String orderID) {
+		
+		if(!con.isStockAllocated(orderID)){
+			ArrayList<OrderLine> lines = con.getOrderLines(orderID);
+		
+			for(OrderLine l : lines) {
+				Product p = getProductDetails(l.productID);
+				int curQ = p.stockUnits;
+				
+				int newQ = curQ - Integer.parseInt(l.quantity);
+				
+				con.updateStockAllocation( orderID, true);
+				updateStock(l.productID, newQ);
+			}
+		}		
+	}
+	
+	public void unAllocateStock(String orderID) {
+		if(con.isStockAllocated(orderID)){
+			ArrayList<OrderLine> lines = con.getOrderLines(orderID);
+			
+			for(OrderLine l : lines) {
+				Product p = getProductDetails(l.productID);
+				int curQ = p.stockUnits;
+				
+				int newQ = curQ + Integer.parseInt(l.quantity);
+				
+				con.updateStockAllocation( orderID, false);
+				updateStock(l.productID, newQ);
+			}
+		}
 	}
 }

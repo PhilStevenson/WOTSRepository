@@ -10,12 +10,12 @@ import java.util.Map;
 public class DBconnect {
 	
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-//	static final String DB_URL = "jdbc:mysql://10.50.15.23:8889/wots";
-	static final String DB_URL = "jdbc:mysql://localhost:8889/wots";
+	static final String DB_URL = "jdbc:mysql://10.50.15.8:8889/wots";
+//	static final String DB_URL = "jdbc:mysql://localhost:8889/wots";
 	
 	static final String USER = "root";
-	static final String PASS = "root";
-//	static final String PASS = "Passw0rd";
+//	static final String PASS = "root";
+	static final String PASS = "Passw0rd";
 	
 	private Connection conn = null;
 	private Statement stmt = null;
@@ -201,7 +201,7 @@ public class DBconnect {
 				cord.dateTime = res.getString("dateTime");
 				cord.zone = res.getString("zone");
 				cord.status = res.getString("status");
-			
+				cord.stockAllocated = res.getBoolean("stockallocated");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -246,6 +246,7 @@ public class DBconnect {
 				prod.description = res.getString("description");
 				prod.price = res.getDouble("price");
 				prod.location = res.getString("location");
+				prod.stockUnits = res.getInt("stockunits");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -423,6 +424,38 @@ public class DBconnect {
 		String query = "UPDATE product SET stockunits = '" + newStock + "' WHERE id = '" + id + "'";
 		
 		updateDB(query);
+	}
+	
+	public void updateStockAllocation(String orderID, boolean allocated) {
+		
+		String query;
+		
+		if(allocated){
+				query = "UPDATE custorder SET stockallocated = 1 WHERE id = '" + orderID + "'";
+		}else{
+				query = "UPDATE custorder SET stockallocated = 0 WHERE id = '" + orderID + "'";
+		}
+		updateDB(query);
+	}
+	
+	public boolean isStockAllocated(String orderID) {
+		
+		String query = "SELECT stockallocated FROM CustOrder WHERE id = '" + orderID + "'";
+		
+		ResultSet res = queryDB(query);
+		
+		boolean allocated = false;
+		
+		try {
+			while(res.next()) { 
+				allocated = res.getBoolean("stockallocated");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return allocated;
 	}
 	
 	

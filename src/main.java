@@ -6,10 +6,11 @@ public class main {
 		System.out.println("Hello World! This is a TEST");
 		
 		
-		
+		DBconnect con = new DBconnect();
 		Customer cus = new Customer();
 		CustOrder ord = new CustOrder();
 		Product pro = new Product();
+		
 		
 		GUI gui = new GUI();
 		

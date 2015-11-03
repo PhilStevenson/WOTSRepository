@@ -11,6 +11,7 @@ public class Order {
 	protected String zone;
 	protected String status;
 	
+	
 	protected enum orderStatus {
 		Pending, Processing, Delivery, Arrived, Closed
 	}
