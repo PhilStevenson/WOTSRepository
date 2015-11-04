@@ -13,7 +13,7 @@ public class DBconnect {
 	// DATABASE CONNECTION VARIABLES
 	
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://10.50.15.8:8889/wots";
+	static final String DB_URL = "jdbc:mysql://10.50.15.15:8889/wots";
 //	static final String DB_URL = "jdbc:mysql://localhost:8889/wots";
 	
 	static final String USER = "root";
